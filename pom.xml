@@ -110,10 +110,6 @@
     <module>esup-portlet-intranet-utils</module>
     <module>esup-portlet-intranet-domain-beans</module>
     <module>esup-portlet-intranet-domain-services</module>
-    <module>esup-portlet-intranet-web-jsf-mixed</module>
-    <module>esup-portlet-intranet-web-jsf-servlet</module>
-    <module>esup-portlet-intranet-web-springmvc-servlet</module>
     <module>esup-portlet-intranet-web-springmvc-portlet</module>
-    <module>esup-portlet-intranet-web-vaadin-touch</module>
   </modules>
 </project>
