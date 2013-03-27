@@ -13,6 +13,10 @@
             <id>jlehtinen.net</id>
             <url>http://repo.jlehtinen.net/maven2/</url>
         </repository>
+        <repository>
+			<id>nuxeo</id>
+			<url>https://maven.nuxeo.org/nexus/content/repositories/public-releases</url>
+		</repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -21,6 +25,12 @@
         </pluginRepository>
     </pluginRepositories>
     <build>
+    	<testSourceDirectory>src/${test-dir}/java</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>src/${test-dir}/resources</directory>
+			</testResource>
+		</testResources>
         <plugins>
             <plugin>
                 <groupId>net.jlehtinen.portlet</groupId>
@@ -90,6 +100,12 @@
             <type>jar</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+        	<groupId>junit</groupId>
+        	<artifactId>junit</artifactId>
+        	<version>4.11</version>
+        	<scope>test</scope>
+        </dependency>
         <!-- the other slf4j jars -->
         <!-- using log4j as backend -->
         <!-- Servlet -->
@@ -124,7 +140,19 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>org.nuxeo.ecm.automation</groupId>
+			<artifactId>nuxeo-automation-client</artifactId>
+			<version>5.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
+		</dependency>
     </dependencies>
+    
     <properties>
         <portlet.name>${project.artifactId}</portlet.name>
     </properties>

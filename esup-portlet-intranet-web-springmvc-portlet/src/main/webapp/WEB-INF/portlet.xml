@@ -31,12 +31,23 @@
         </portlet-info>
 
         <portlet-preferences>
-            <preference>
+        	<preference>
                 <name>usernamepref</name>
                 <value>PortletWorld</value>
             </preference>
+            <preference>
+                <name>nuxeoHost</name>
+                <value>${nuxeoHost}</value>
+            </preference>
+            <preference>
+                <name>intranetPath</name>
+                <value>${intranetPath}</value>
+            </preference>
+            <preference>
+                <name>nuxeoPortalAuthSecret</name>
+                <value>${nuxeoPortalAuthSecret}</value>
+            </preference>
         </portlet-preferences>
-
     </portlet>
 
 </portlet-app>

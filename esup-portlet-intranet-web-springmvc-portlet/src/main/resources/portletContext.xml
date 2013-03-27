@@ -10,5 +10,6 @@
     <!-- Annotations Configuration 	-->
     <context:annotation-config/>
     <context:component-scan base-package="org.esup.portlet.intranet.web.springmvc"/>
+ 	<context:component-scan base-package="org.esup.portlet.intranet.nuxeo"/>
 
 </beans>
