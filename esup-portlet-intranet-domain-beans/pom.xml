@@ -4,7 +4,7 @@
     <parent>
         <artifactId>esup-portlet-intranet</artifactId>
         <groupId>org.esupportail</groupId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.1.0</version>
     </parent>
     <artifactId>esup-portlet-intranet-domain-beans</artifactId>
     <description>The business object</description>
