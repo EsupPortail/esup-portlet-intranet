@@ -18,10 +18,6 @@ public class UserSessionTest extends BaseTestCase{
 		u.init(request, authenticator);
 		
 		System.out.println("test");
-		
-		
-		
-		
 	}
 
 }

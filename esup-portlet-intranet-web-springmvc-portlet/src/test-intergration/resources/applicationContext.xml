@@ -16,6 +16,15 @@
 			</list>
 		</property>
 	</bean>
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+	    <property name="scopes">
+	        <map>
+	            <entry key="session">
+	                <bean class="org.springframework.context.support.SimpleThreadScope"/>
+	            </entry>
+	        </map>
+	    </property>
+	</bean>
  	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 	<import resource="classpath*:META-INF/esup-portlet-intranet-domain-services-auth.xml" />
  	
