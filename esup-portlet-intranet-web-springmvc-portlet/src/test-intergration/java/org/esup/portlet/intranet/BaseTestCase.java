@@ -1,6 +1,7 @@
 package org.esup.portlet.intranet;
 
 import org.esup.portlet.intranet.nuxeo.NuxeoServiceImpl;
+import org.esup.portlet.intranet.services.auth.MockAuthenticator;
 import org.esup.portlet.intranet.web.springmvc.WebController;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,8 @@ public class BaseTestCase {
 	@Autowired
 	protected NuxeoServiceImpl nuxeoService;	
 	
+	protected MockAuthenticator authenticator;
+	
 	@Autowired
 	protected WebController webController;
 	String key = "jed";
@@ -39,6 +42,8 @@ public class BaseTestCase {
 		prefs.setValue("nuxeoHost", nuxeoHost);
 		prefs.setValue("intranetPath", intranetPath);
 		prefs.setValue("nuxeoPortalAuthSecret", nuxeoPortalAuthSecret);
+		this.authenticator = new MockAuthenticator();
+		authenticator.setUserId(userId);
 		webController.setNuxeoService(nuxeoService);
 	}
 	

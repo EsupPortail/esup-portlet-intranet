@@ -28,7 +28,7 @@
         <portlet-preferences>
             <preference>
                 <name>nuxeoHost</name>
-                <value>http://enor.univ-rennes1.fr:8080/nuxeo</value>
+                <value>http://localhost:8080/nuxeo</value>
             </preference>
             <preference>
                 <name>intranetPath</name>
@@ -44,6 +44,6 @@
         <name>uid</name>
     </user-attribute>
     <user-attribute>
-        <name>userName</name>
+        <name>username</name>
     </user-attribute>
 </portlet-app>

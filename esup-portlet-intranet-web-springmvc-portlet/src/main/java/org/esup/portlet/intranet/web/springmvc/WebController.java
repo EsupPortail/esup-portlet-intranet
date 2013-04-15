@@ -3,7 +3,6 @@ package org.esup.portlet.intranet.web.springmvc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
-import java.util.Timer;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -40,31 +39,31 @@ public class WebController extends AbastractExceptionController{
 		this.nuxeoService = nuxeoService;
 	}
 	@Autowired
-	private Authenticator authenticator;	
+	private Authenticator authenticator;
+	
+	public void setAuthenticator(Authenticator authenticator) {
+		this.authenticator = authenticator;
+	}
 	@Autowired
 	private UserSession userSession;
-	
-    @RenderMapping
-    public ModelAndView init(RenderRequest request, RenderResponse response) throws Exception {
-    	if(!userSession.isInitialized()){
-    		userSession.init(request, authenticator);
-    	}
-    	return getList(request, response);
-    }
-    
-    @RenderMapping(params="action=list")
-    public ModelAndView getList(RenderRequest request, RenderResponse response) throws Exception {  	
+    public UserSession getUserSession() {
+		return userSession;
+	}
+
+	@RenderMapping
+    public ModelAndView getList(RenderRequest request, RenderResponse response) throws Exception { 
     	ModelMap model = new ModelMap();
+    	userSession.init(request, authenticator);
     	String intranetPath = request.getParameter("intranetPath");
     	model.put("docs", nuxeoService.getList(userSession, intranetPath));
     	model.put("mode", request.getParameter("action"));
-    	model.put("uid", userSession.getUid());
     	setBreadcrumb(model,intranetPath);
         return new ModelAndView("view", model);
     }
     
     @ActionMapping(params="action=search")
 	public void searchDocs(ActionRequest request, ActionResponse response) throws Exception {
+    	userSession.init(request, authenticator);
     	response.setRenderParameter("key", request.getParameter("key"));
     	response.setRenderParameter("action","search");
 	}
@@ -79,6 +78,7 @@ public class WebController extends AbastractExceptionController{
     
     @RenderMapping(params="action=new")
     public ModelAndView getNew(RenderRequest request, RenderResponse response) throws Exception {
+    	userSession.init(request, authenticator);
     	ModelMap model = new ModelMap();
      	model.put("docs", nuxeoService.getNews(userSession));
      	model.put("mode", request.getParameter("action"));
@@ -87,6 +87,7 @@ public class WebController extends AbastractExceptionController{
     
     @ResourceMapping
     public void fileDown(ResourceRequest request, ResourceResponse response) throws Exception {
+    	userSession.init(request, authenticator);
     	String filePath = request.getParameter("filePath");
     	FileBlob f = nuxeoService.getFile(userSession, filePath);
     	File file = f.getFile();

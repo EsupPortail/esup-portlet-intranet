@@ -9,14 +9,13 @@ public class UserSessionTest extends BaseTestCase{
 
 	@Test
 	public void test() throws Exception{
-		UserSession u = new UserSession();
+		UserSession userSession = new UserSession();
 		MockAuthenticator authenticator = new MockAuthenticator();
-		authenticator.setUserId("dongyoon");
+		authenticator.setUserId("loginUser");
 		MockRenderRequest request = new MockRenderRequest();
 		request.setPreferences(prefs);
-		request.getPortletSession(true).setMaxInactiveInterval(10000);
-		u.init(request, authenticator);
-		
+		request.getPortletSession(true).setMaxInactiveInterval(10);
+		userSession.init(request, authenticator);
 		System.out.println("test");
 	}
 
