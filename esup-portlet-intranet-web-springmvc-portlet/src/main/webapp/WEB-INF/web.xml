@@ -26,6 +26,51 @@
     </context-param>
     
     <!--
+     | CAS Authentication Filter
+     +-->    
+
+<!-- Validation filter delegates to spring configuration in WEB-INF/context/applicationContext.jsp -->
+    <!-- <filter>
+        <filter-name>CAS Validation Filter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetBeanName</param-name>
+            <param-value>ticketValidationFilter</param-value>
+        </init-param>
+    </filter>
+    
+    <filter>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+    </filter>
+    
+    <filter>
+        <filter-name>CAS Assertion Thread Local Filter</filter-name>
+        <filter-class>org.jasig.cas.client.util.AssertionThreadLocalFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/content/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/proxy/receptor</url-pattern>
+    </filter-mapping>
+    
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/content/*</url-pattern>
+    </filter-mapping>
+    
+    <filter-mapping>
+        <filter-name>CAS Assertion Thread Local Filter</filter-name>
+        <url-pattern>/content/*</url-pattern>
+    </filter-mapping> -->
+
+
+    <!--
      | The order of these listeners is important and should not be changed
      +-->
     <listener>
@@ -55,5 +100,9 @@
         <servlet-name>ViewRendererServlet</servlet-name>
         <url-pattern>/WEB-INF/servlet/view</url-pattern>
     </servlet-mapping>
+    
+    <session-config>
+	  	<session-timeout>60</session-timeout>
+	</session-config>
  
 </web-app>

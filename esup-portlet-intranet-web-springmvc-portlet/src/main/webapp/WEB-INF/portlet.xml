@@ -5,10 +5,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
                         http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
-
     <portlet>
         <portlet-name>esup-portlet-intranet</portlet-name>
-        <display-name xml:lang="fr">esup-portlet-intranet-web-springmvc-portlet</display-name>
+        <display-name xml:lang="fr">esup-portlet-intranet</display-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
         <init-param>
             <name>contextConfigLocation</name>
@@ -18,23 +17,15 @@
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>VIEW</portlet-mode>
-            <portlet-mode>EDIT</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-            <portlet-mode>ABOUT</portlet-mode>
         </supports>
         <supported-locale>fr</supported-locale>
         <supported-locale>en</supported-locale>
         <portlet-info>
-            <title>esup-portlet-intranet-web-springmvc-portlet</title>
-            <short-title>esup-portlet-intranet-web-springmvc-portlet</short-title>
-            <keywords>esup-portlet-intranet-web-springmvc-portlet</keywords>
+            <title>esup-portlet-intranet3</title>
+            <short-title>esup-portlet-intranet3</short-title>
+            <keywords>esup-portlet-intranet3</keywords>
         </portlet-info>
-
         <portlet-preferences>
-        	<preference>
-                <name>usernamepref</name>
-                <value>PortletWorld</value>
-            </preference>
             <preference>
                 <name>nuxeoHost</name>
                 <value>${nuxeoHost}</value>
@@ -49,5 +40,10 @@
             </preference>
         </portlet-preferences>
     </portlet>
-
+    <user-attribute>
+        <name>uid</name>
+    </user-attribute>
+    <user-attribute>
+        <name>userName</name>
+    </user-attribute>
 </portlet-app>

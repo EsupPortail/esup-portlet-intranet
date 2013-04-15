@@ -1,124 +1,86 @@
 package org.esup.portlet.intranet.nuxeo;
 
-import javax.portlet.PortletPreferences;
-
-import org.esup.portlet.intranet.services.auth.Authenticator;
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.esup.portlet.intranet.web.UserSession;
 import org.nuxeo.ecm.automation.client.jaxrs.Constants;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
-import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
+import org.nuxeo.ecm.automation.client.jaxrs.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
 import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NuxeoServiceImpl implements NuxeoService{
-	/**
-	 * A logger.
-	 */
-	private final Logger logger = new LoggerImpl(this.getClass());
-	private static final String DEFAULT_USERNAME = "JavaWorld";
-    private static final String NUXEO_HOST = "nuxeoHost";
-    private static final String INTRANET_PATH = "intranetPath";
-    private static final String NUXEO_PORTAL_AUTH_SECRET = "nuxeoPortalAuthSecret";
-	
-    @Autowired
-	private Authenticator authenticator; 
     
-	private Session getSession(PortletPreferences prefs, HttpAutomationClient client){
-		try {
-			//client.setRequestInterceptor(new PortalSSOAuthInterceptor(secret, user));
-			//Session session = client.getSession();
-			
-			String nuxeoPortalAuthSecret = prefs.getValue(NUXEO_PORTAL_AUTH_SECRET, DEFAULT_USERNAME);
-			Session session = client.getSession(authenticator.getUser().getLogin(), nuxeoPortalAuthSecret);
-			
-			return session;
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-		return null;
-	}
 	
-	private Documents queryList(PortletPreferences prefs, String query){
-		try {
-			String nuxeoHost = prefs.getValue(NUXEO_HOST, DEFAULT_USERNAME);
-			HttpAutomationClient client = new HttpAutomationClient(nuxeoHost + "/site/automation");
-			Session session = getSession(prefs, client);
-			if(session != null){
-				Documents docs = (Documents) session.newRequest("Document.Query").set("query", query).execute();
-				client.shutdown();
-				return docs;
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-		return null;
-	}
-
-	@Override
-	public Documents getList(PortletPreferences prefs) {
-		String intranetPath = prefs.getValue(INTRANET_PATH, DEFAULT_USERNAME);
-		String query = "SELECT * FROM Document WHERE (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + intranetPath + "\")" ;
-		Documents docs = queryList(prefs, query);
+	private Documents queryList(UserSession userSession, String query) throws Exception{
+		Session session = userSession.getSession();
+		Documents docs = (Documents) session.newRequest(DocumentService.Query).set("query", query).execute();
 		return docs;
 	}
 	
 	@Override
-	public FileBlob getFile(PortletPreferences prefs, String filePath) {
-		try {
-			String nuxeoHost = prefs.getValue(NUXEO_HOST, DEFAULT_USERNAME);
-			HttpAutomationClient client = new HttpAutomationClient(nuxeoHost + "/site/automation");
-			Session session = getSession(prefs, client);
-			if(session != null){
-				// Get the file document where blob was attached
-				Document doc = (Document) session.newRequest(
-				        "Document.Fetch").setHeader(
-				        Constants.HEADER_NX_SCHEMAS, "*").set("value", filePath).execute();
-				// get the file content property
-				PropertyMap map = doc.getProperties().getMap("file:content");
-				// get the data URL
-				String path = map.getString("data");
-				 
-				// download the file from its remote location
-				FileBlob blob = (FileBlob) session.getFile(path);
-				client.shutdown();
-				return blob;
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage());
+	public Documents getList(UserSession userSession) throws Exception{
+		return getList(userSession, userSession.getIntranetPath());
+	}
+
+	@Override
+	public Documents getList(UserSession userSession, String intranetPath) throws Exception{
+		if (intranetPath == null)
+			intranetPath = userSession.getIntranetPath();
+		Session session = userSession.getSession();
+		Document root = (Document) session.newRequest(DocumentService.FetchDocument).set("value", intranetPath).execute();
+		if(root != null){
+			String query = "SELECT * FROM Document WHERE ecm:parentId = '"+root.getId()+"'";
+			Documents docs = (Documents) session.newRequest("Document.Query").setHeader(
+			        Constants.HEADER_NX_SCHEMAS, "*").set("query", query).execute();
+			return docs;
 		}
-		
 		return null;
 	}
+	
+	@Override
+	public FileBlob getFile(UserSession userSession, String filePath) throws Exception{
+		Session session = userSession.getSession();
+		// Get the file document where blob was attached
+		Document doc = (Document) session.newRequest("Document.Fetch").setHeader(
+		        Constants.HEADER_NX_SCHEMAS, "*").set("value", filePath).execute();
+		// get the file content property
+		PropertyMap map = doc.getProperties().getMap("file:content");
+		// get the data URL
+		String path = map.getString("data");
+//		String lastContributor = doc.getProperties().getString("dc:lastContributor");
+//		String modified = doc.getProperties().getString("dc:lastContributor");
+		 
+		// download the file from its remote location
+		FileBlob blob = (FileBlob) session.getFile(path);
+		return blob;
+	}
 
 	@Override
-	public Documents getNews(PortletPreferences prefs) {
-		String intranetPath = prefs.getValue(INTRANET_PATH, DEFAULT_USERNAME);
-		String query = "SELECT * FROM Document WHERE (ecm:path STARTSWITH \"" + intranetPath + "\")"
+	public Documents getNews(UserSession userSession) throws Exception{
+		String query = "SELECT * FROM Document WHERE (ecm:path STARTSWITH \"" + userSession.getIntranetPath() + "\")"
 				+ " AND (ecm:primaryType = 'File') ORDER BY dc:modified DESC ";
-		return queryList(prefs, query);
+		return queryList(userSession, query);
+	}
+
+	@Override
+	public Documents search(UserSession userSession, String key) throws Exception{
+		String query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
+				+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + userSession.getIntranetPath() + "\") ORDER BY dc:modified DESC";
+		return queryList(userSession, query);
 	}
 	
-
 	@Override
-	public Documents search(PortletPreferences prefs, String key) {
-		return search(prefs, key, null);
-	}
-	@Override
-	public Documents search(PortletPreferences prefs, String key, String orderBy) {
-		String intranetPath = prefs.getValue(INTRANET_PATH, DEFAULT_USERNAME);
-		String orderClause = "";
-		if (orderBy != null) {
-			orderClause = " ORDER BY " + orderBy;
+	public Documents getTree(UserSession userSession) throws Exception {
+		Session session = userSession.getSession();
+		Document root = (Document) session.newRequest(DocumentService.FetchDocument).set("value", userSession.getIntranetPath()).execute();
+		if(root != null){
+			Documents docs = (Documents) session.newRequest(DocumentService.GetDocumentChildren).setInput(root).execute();
+			return docs;
 		}
-		String query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
-				+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + intranetPath + "\")" + orderClause;
-		return queryList(prefs, query);
+		return null;
 	}
 
 }
