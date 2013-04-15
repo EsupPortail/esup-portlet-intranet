@@ -1,28 +1,34 @@
 package org.esup.portlet.intranet.web;
 
-import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
 
 import org.esup.portlet.intranet.services.auth.Authenticator;
 import org.nuxeo.ecm.automation.client.jaxrs.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
 import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.PortalSSOAuthInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+@Scope("session")
 @Service
 public class UserSession {
 	private String rootPath;
 	private String nuxeoHost;
 	private String intranetPath;
 	private String nuxeoPortalAuthSecret;
-	private Session session;
+	private Session nuxeoSession;
 	private boolean initialized = false;
 	private String uid;
-	
-	@Autowired
-	private Authenticator authenticator;
-	
+	Timer timer;
+	private RemindTask myTask;
+	PortletSession portletSession;
+	long lastAccessedTime;
+	boolean isNuxeoSession = false;
 	
 	public String getUid() {
 		return uid;
@@ -58,7 +64,9 @@ public class UserSession {
 		this.nuxeoPortalAuthSecret = nuxeoPortalAuthSecret;
 	}
 	
-	public void init(PortletPreferences prefs) throws Exception{
+	public void init(RenderRequest request,Authenticator authenticator) throws Exception{
+		this.portletSession = request.getPortletSession();
+		PortletPreferences prefs = request.getPreferences();
 		this.nuxeoHost = prefs.getValue("nuxeoHost", null);
 		this.intranetPath = prefs.getValue("intranetPath", null);
 		this.rootPath = this.intranetPath;
@@ -70,23 +78,47 @@ public class UserSession {
 			// mode local test with pluto.
 			this.uid = "Administrator";
 		}
-		this.session = getSession();
+		timer = new Timer();
+		
+		this.nuxeoSession = getNuxeoSession();
+		
+		myTask = new RemindTask();
+		timer.schedule(myTask, 0, this.portletSession.getMaxInactiveInterval());
+		
+		lastAccessedTime = this.portletSession.getLastAccessedTime();
 		this.initialized = true;
 	}
 
-	public Session getSession() throws Exception{
-		if(session == null){
+	public Session getNuxeoSession() throws Exception{
+		if(nuxeoSession == null){
 			HttpAutomationClient client = new HttpAutomationClient(nuxeoHost + "/site/automation");
 			client.setRequestInterceptor(new PortalSSOAuthInterceptor(nuxeoPortalAuthSecret, this.uid));
-			this.session = client.getSession();
+			//this.nuxeoSession = client.getSession();
+			isNuxeoSession = true;
 		}
-		return session;
+		this.lastAccessedTime = this.portletSession.getLastAccessedTime();
+		return nuxeoSession;
 	}
 	
-	public void expireSession(@SuppressWarnings("rawtypes") Map sessionMap){
-		if(session != null)
-			session.getClient().shutdown();
-		session = null;
-		sessionMap.remove("userSession");
+	public void expireSession(){
+		if(nuxeoSession != null)
+			nuxeoSession.getClient().shutdown();
+		nuxeoSession = null;
+		this.portletSession.removeAttribute("userSession");
+		this.timer.cancel();
+		this.timer = null;
+		this.initialized = false;
 	}
+	
+	class RemindTask extends TimerTask {
+        public void run() {
+        	long current = System.currentTimeMillis();
+        	long interval = portletSession.getMaxInactiveInterval();
+        	long restTime = current - lastAccessedTime;
+        	
+        	if(restTime > interval)
+        		expireSession();
+        }
+    }
+	
 }

@@ -15,7 +15,7 @@ public class NuxeoServiceImpl implements NuxeoService{
     
 	
 	private Documents queryList(UserSession userSession, String query) throws Exception{
-		Session session = userSession.getSession();
+		Session session = userSession.getNuxeoSession();
 		Documents docs = (Documents) session.newRequest(DocumentService.Query).set("query", query).execute();
 		return docs;
 	}
@@ -29,7 +29,7 @@ public class NuxeoServiceImpl implements NuxeoService{
 	public Documents getList(UserSession userSession, String intranetPath) throws Exception{
 		if (intranetPath == null)
 			intranetPath = userSession.getIntranetPath();
-		Session session = userSession.getSession();
+		Session session = userSession.getNuxeoSession();
 		Document root = (Document) session.newRequest(DocumentService.FetchDocument).set("value", intranetPath).execute();
 		if(root != null){
 			String query = "SELECT * FROM Document WHERE ecm:parentId = '"+root.getId()+"'";
@@ -42,9 +42,9 @@ public class NuxeoServiceImpl implements NuxeoService{
 	
 	@Override
 	public FileBlob getFile(UserSession userSession, String filePath) throws Exception{
-		Session session = userSession.getSession();
+		Session session = userSession.getNuxeoSession();
 		// Get the file document where blob was attached
-		Document doc = (Document) session.newRequest("Document.Fetch").setHeader(
+		Document doc = (Document) session.newRequest(DocumentService.FetchDocument).setHeader(
 		        Constants.HEADER_NX_SCHEMAS, "*").set("value", filePath).execute();
 		// get the file content property
 		PropertyMap map = doc.getProperties().getMap("file:content");
@@ -74,7 +74,7 @@ public class NuxeoServiceImpl implements NuxeoService{
 	
 	@Override
 	public Documents getTree(UserSession userSession) throws Exception {
-		Session session = userSession.getSession();
+		Session session = userSession.getNuxeoSession();
 		Document root = (Document) session.newRequest(DocumentService.FetchDocument).set("value", userSession.getIntranetPath()).execute();
 		if(root != null){
 			Documents docs = (Documents) session.newRequest(DocumentService.GetDocumentChildren).setInput(root).execute();

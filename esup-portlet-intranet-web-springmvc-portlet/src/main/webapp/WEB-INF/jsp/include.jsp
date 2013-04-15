@@ -27,22 +27,13 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
 
-<ul class="nav nav-pills">
 <c:choose>
-	<c:when test="${mode eq 'list' || mode eq 'search' || mode eq null}">
-		<li class="active"><a href="${homeUrl}">Home</a></li>
-		<li><a href="${newUrl}">New Documents</a></li>
-		<li><a href="${treeUrl}">Tree</a></li>
-	</c:when>
 	<c:when test="${mode eq 'new'}">
-		<li><a href="${homeUrl}">Home</a></li>
-		<li class="active"><a href="${newUrl}">New Documents</a></li>
-		<li><a href="${treeUrl}">Tree</a></li>
+		<a href="${homeUrl}" class="btn btn-small disabled">Home</a>
+		<a href="${newUrl}" class="btn btn-small btn-info disabled">New Documents</a>
 	</c:when>
 	<c:otherwise>
-		<li><a href="${homeUrl}">Home</a></li>
-		<li><a href="${newUrl}">New Documents</a></li>
-		<li class="active"><a href="${treeUrl}">Tree</a></li>
+		<a href="${homeUrl}" class="btn btn-small btn-info disabled">Home</a>
+		<a href="${newUrl}" class="btn btn-small disabled">New Documents</a>
 	</c:otherwise>
-</c:choose>
-</ul>	
+</c:choose>	

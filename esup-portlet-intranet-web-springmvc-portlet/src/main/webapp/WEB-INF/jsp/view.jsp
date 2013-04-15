@@ -1,9 +1,20 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
+${uid}
+<table align="right">
+<tr><td>
+<!-- List view start -->
+<form:form name="catalogForm" method="post" action="${searchUrl}" class="form-inline">
+	<input type="text" name="key" class="input-small" />
+	<button type="submit" class="btn btn-small">Search</button>
+</form:form>
+</td>
+</tr>
+</table>
 <c:choose>
 	<c:when test="${mode eq 'list'}">
-<c:if test="${not empty breadcrumb}">
-	<ul class="breadcrumb">
-		<c:forEach var="b" items="${breadcrumb}" varStatus="status">
+		<c:if test="${not empty breadcrumb}">
+		<ul class="breadcrumb">
+			<c:forEach var="b" items="${breadcrumb}" varStatus="status">
 			<c:if test="${not status.last}">
 				<li><a href="
 						<portlet:renderURL>
@@ -17,30 +28,18 @@
 				<li class="active">${b.title}</li>
 			</c:if>
 		</c:forEach>
-	</ul>
-</c:if>	
-</c:when>
+		</ul>
+		</c:if>	
+	</c:when>
 </c:choose>
-<table align="right">
-<tr><td>
-<!-- List view start -->
-<form:form name="catalogForm" method="post" action="${searchUrl}" class="form-inline">
-	<input type="text" name="key" class="input-small" />
-	<button type="submit" class="btn btn-small">Search</button>
-</form:form>
-</td>
-</tr>
-</table>
 <table class="table table-hover">
-	<thead>
-		<tr>
-			<th width="10"></th>
-			<th>Titre</th>
-			<th>Dernière modification</th>
-			<th>Auteur</th>
-			<th>Description</th>
-		</tr>
-	</thead>
+	<tr>
+		<th width="10"></th>
+		<th>Titre</th>
+		<th>Dernière modification</th>
+		<th>Auteur</th>
+		<th>Description</th>
+	</tr>
 	<tbody>
 		<c:if test="${not empty docs}">
 		<c:forEach var="doc" items="${docs}">

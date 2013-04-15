@@ -4938,8 +4938,8 @@ input[type="submit"].btn.btn-mini {
 }
 
 .breadcrumb {
-  padding: 8px 15px;
-  margin: 0 0 20px;
+  padding: 5px 15px;
+  margin: 5 0 20px;
   list-style: none;
   background-color: #f5f5f5;
   -webkit-border-radius: 4px;

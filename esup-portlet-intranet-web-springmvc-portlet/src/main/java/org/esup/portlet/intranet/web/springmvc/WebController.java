@@ -3,6 +3,7 @@ package org.esup.portlet.intranet.web.springmvc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.util.Timer;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -12,6 +13,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.esup.portlet.intranet.nuxeo.NuxeoService;
+import org.esup.portlet.intranet.services.auth.Authenticator;
 import org.esup.portlet.intranet.web.Breadcrumb;
 import org.esup.portlet.intranet.web.UserSession;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
@@ -31,19 +33,22 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 @Controller
 @RequestMapping(value = "VIEW")
 public class WebController extends AbastractExceptionController{
+	
     @Autowired
     private NuxeoService nuxeoService;
 	public void setNuxeoService(NuxeoService nuxeoService) {
 		this.nuxeoService = nuxeoService;
 	}
-	
+	@Autowired
+	private Authenticator authenticator;	
 	@Autowired
 	private UserSession userSession;
-    
+	
     @RenderMapping
     public ModelAndView init(RenderRequest request, RenderResponse response) throws Exception {
-    	if(!userSession.isInitialized())
-    		userSession.init(request.getPreferences());
+    	if(!userSession.isInitialized()){
+    		userSession.init(request, authenticator);
+    	}
     	return getList(request, response);
     }
     
