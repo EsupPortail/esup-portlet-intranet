@@ -15,10 +15,11 @@ public class SessionTimeoutListener extends HttpSessionEventPublisher{
 		ApplicationContext appContext = ApplicationContextProvider.getAppContext();
 	    SessionRegistry sessionRegistry = appContext.getBean("sessionRegistry", SessionRegistry.class);	    
 	    
-	    SessionInformation sessionInfo = (sessionRegistry != null ? sessionRegistry.getSessionInformation(event.getSession().getId()) : null);
-	    UserSession userSession = null;
+	    SessionInformation sessionInfo = (sessionRegistry != null ? 
+	    		sessionRegistry.getSessionInformation(event.getSession().getId()) : null);
+	    NuxeoResource userSession = null;
 	    if (sessionInfo != null) {
-	    	userSession = (UserSession) sessionInfo.getPrincipal();
+	    	userSession = (NuxeoResource) sessionInfo.getPrincipal();
 	    }
 	    if (userSession != null) {
 	    	userSession.expireSession();

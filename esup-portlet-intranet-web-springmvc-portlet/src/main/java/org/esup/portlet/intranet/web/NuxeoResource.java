@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Scope("session")
 @Service
-public class UserSession {
+public class NuxeoResource {
 	private String rootPath;
 	private Session nuxeoSession;
 	private boolean initialized = false;
@@ -39,7 +39,7 @@ public class UserSession {
 	public void init(PortletRequest request,Authenticator authenticator) throws Exception{
 		if(!this.initialized){
 			this.prefs = request.getPreferences();
-			this.rootPath = prefs.getValue("intranetPath", null);
+			this.rootPath = prefs.getValue("intranetPath",null);
 			String uid;
 			try {
 				uid = authenticator.getUser().getLogin();

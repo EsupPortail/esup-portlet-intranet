@@ -164,11 +164,15 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-        
         <dependency>
 			<groupId>org.nuxeo.ecm.automation</groupId>
 			<artifactId>nuxeo-automation-client</artifactId>
 			<version>5.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nuxeo.ecm.core</groupId>
+			<artifactId>nuxeo-core-schema</artifactId>
+			<version>1.6.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
