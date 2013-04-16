@@ -17,18 +17,19 @@
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>VIEW</portlet-mode>
+            <portlet-mode>EDIT</portlet-mode>
         </supports>
         <supported-locale>fr</supported-locale>
         <supported-locale>en</supported-locale>
         <portlet-info>
-            <title>esup-portlet-intranet3</title>
-            <short-title>esup-portlet-intranet3</short-title>
-            <keywords>esup-portlet-intranet3</keywords>
+            <title>esup-portlet-intranet</title>
+            <short-title>esup-portlet-intranet</short-title>
+            <keywords>esup-portlet-intranet</keywords>
         </portlet-info>
         <portlet-preferences>
             <preference>
                 <name>nuxeoHost</name>
-                <value>http://localhost:8080/nuxeo</value>
+                <value>http://enor.univ-rennes1.fr:8080/nuxeo</value>
             </preference>
             <preference>
                 <name>intranetPath</name>

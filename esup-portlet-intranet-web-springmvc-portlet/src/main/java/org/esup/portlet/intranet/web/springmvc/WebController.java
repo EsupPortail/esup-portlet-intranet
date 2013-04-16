@@ -6,6 +6,7 @@ import java.io.OutputStream;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -14,7 +15,7 @@ import javax.portlet.ResourceResponse;
 import org.esup.portlet.intranet.nuxeo.NuxeoService;
 import org.esup.portlet.intranet.services.auth.Authenticator;
 import org.esup.portlet.intranet.web.Breadcrumb;
-import org.esup.portlet.intranet.web.UserSession;
+import org.esup.portlet.intranet.web.NuxeoResource;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +46,13 @@ public class WebController extends AbastractExceptionController{
 		this.authenticator = authenticator;
 	}
 	@Autowired
-	private UserSession userSession;
-    public UserSession getUserSession() {
+	private NuxeoResource userSession;
+    public NuxeoResource getUserSession() {
 		return userSession;
 	}
 
 	@RenderMapping
-    public ModelAndView getList(RenderRequest request, RenderResponse response) throws Exception { 
+    public ModelAndView getList(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
     	userSession.init(request, authenticator);
     	String intranetPath = request.getParameter("intranetPath");
@@ -60,7 +61,12 @@ public class WebController extends AbastractExceptionController{
     	setBreadcrumb(model,intranetPath);
         return new ModelAndView("view", model);
     }
-    
+	
+	@RenderMapping(params="action=editDone")
+	public ModelAndView editDone(RenderRequest request, RenderResponse response) throws Exception {
+    	return getList(request, response);
+	}
+	
     @ActionMapping(params="action=search")
 	public void searchDocs(ActionRequest request, ActionResponse response) throws Exception {
     	userSession.init(request, authenticator);
@@ -121,4 +127,5 @@ public class WebController extends AbastractExceptionController{
 		b.setBreadcrumb(userSession.getRootPath(), intranetPath);
 		model.put("breadcrumb", b.getPathList());
     }
+    
 }

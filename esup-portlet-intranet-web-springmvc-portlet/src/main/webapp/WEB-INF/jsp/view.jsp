@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
-${uid}
+<%@ include file="/WEB-INF/jsp/menu.jsp"%>
 <table align="right">
 <tr><td>
 <!-- List view start -->
@@ -78,15 +78,12 @@ ${uid}
 							">${doc.title}</a>
 						</c:otherwise>
 					</c:choose></td>
-				<td> </td>
-				<td></td>
-				<td></td>
+				<td> ${esup:getLastModified(doc.properties, 'dc:modified')}</td>
+				<td>${esup:getValue(doc.properties, 'dc:creator')}</td>
+				<td>${esup:getValue(doc.properties, 'dc:description')}</td>
 			</tr>
 		</c:forEach>
 		</c:if>
 	</tbody>
 </table>
 <!-- List view end -->						
-									
-
-
