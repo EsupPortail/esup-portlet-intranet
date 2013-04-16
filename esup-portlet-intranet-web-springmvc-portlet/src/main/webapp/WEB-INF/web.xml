@@ -24,9 +24,6 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>
     </context-param>
-    
-  
-
 
     <!--
      | The order of these listeners is important and should not be changed
@@ -34,15 +31,12 @@
     <listener>
         <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
     </listener>
-    
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
-    
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-    
     <listener>
 	    <listener-class>org.esup.portlet.intranet.web.SessionTimeoutListener</listener-class>
   	</listener>
