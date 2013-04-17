@@ -17,16 +17,14 @@ public abstract class AbastractExceptionController {
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleException(Exception ex) {
 		
-		logger.error("Exception catching in spring mvc controller ... ", ex);
-		
+		logger.error("Exception catching in spring mvc controller ... ", ex);		
 		ModelMap model = new ModelMap();
 		
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
     	PrintStream print = new PrintStream(output);
     	ex.printStackTrace(print);
     	String exceptionStackTrace = new String(output.toByteArray());
-    	model.put("exceptionStackTrace", exceptionStackTrace);
-    	
+    	model.put("exceptionStackTrace", exceptionStackTrace);    	
     	model.put("exceptionMessage", ex.getMessage());
 
     	

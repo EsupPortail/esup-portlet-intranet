@@ -8,19 +8,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ taglib prefix="esup" uri="/WEB-INF/nuxeo-doc-taglib.tld" %>
-
 <portlet:defineObjects/>
-<portlet:renderURL var="homeUrl"/>
-<portlet:actionURL var="searchUrl">
-	<portlet:param name="action" value="search" />
-</portlet:actionURL>
-<portlet:renderURL var="newUrl">
-	<portlet:param name="action" value="new" />
-</portlet:renderURL>
-
 <c:set var="n"><portlet:namespace/></c:set>
-<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.min.css" />
-
+<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
 

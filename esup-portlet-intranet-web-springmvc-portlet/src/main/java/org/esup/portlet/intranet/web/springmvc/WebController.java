@@ -6,7 +6,6 @@ import java.io.OutputStream;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -41,6 +40,8 @@ public class WebController extends AbastractExceptionController{
 	}
 	@Autowired
 	private Authenticator authenticator;
+	@Autowired
+	private EditWebController editController;
 	
 	public void setAuthenticator(Authenticator authenticator) {
 		this.authenticator = authenticator;
@@ -50,23 +51,26 @@ public class WebController extends AbastractExceptionController{
     public NuxeoResource getUserSession() {
 		return userSession;
 	}
-
-	@RenderMapping
+    
+    @RenderMapping
+    public ModelAndView init(RenderRequest request, RenderResponse response) throws Exception {
+    	if(request.getPreferences().getValue("nuxeoHost",null).equals("${nuxeoHost}")){
+    		return new ModelAndView("init", null);
+    	}
+        return getList(request,response);
+    }
+    
+	@RenderMapping(params="action=list")
     public ModelAndView getList(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
     	userSession.init(request, authenticator);
     	String intranetPath = request.getParameter("intranetPath");
     	model.put("docs", nuxeoService.getList(userSession, intranetPath));
-    	model.put("mode", request.getParameter("action"));
+    	model.put("mode", "list");
     	setBreadcrumb(model,intranetPath);
         return new ModelAndView("view", model);
     }
-	
-	@RenderMapping(params="action=editDone")
-	public ModelAndView editDone(RenderRequest request, RenderResponse response) throws Exception {
-    	return getList(request, response);
-	}
-	
+
     @ActionMapping(params="action=search")
 	public void searchDocs(ActionRequest request, ActionResponse response) throws Exception {
     	userSession.init(request, authenticator);

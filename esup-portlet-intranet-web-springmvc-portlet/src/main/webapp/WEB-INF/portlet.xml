@@ -29,15 +29,15 @@
         <portlet-preferences>
             <preference>
                 <name>nuxeoHost</name>
-                <value>http://enor.univ-rennes1.fr:8080/nuxeo</value>
+                <value>${nuxeoHost}</value>
             </preference>
             <preference>
                 <name>intranetPath</name>
-                <value>/default-domain/workspaces/devq</value>
+                <value>${intranetPath}</value>
             </preference>
             <preference>
                 <name>nuxeoPortalAuthSecret</name>
-                <value>secret</value>
+                <value>${nuxeoPortalAuthSecret}</value>
             </preference>
         </portlet-preferences>
     </portlet>

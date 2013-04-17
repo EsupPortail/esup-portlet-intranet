@@ -1,44 +1,14 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@ include file="/WEB-INF/jsp/menu.jsp"%>
-<table align="right">
-<tr><td>
-<!-- List view start -->
-<form:form name="catalogForm" method="post" action="${searchUrl}" class="form-inline">
-	<input type="text" name="key" class="input-small" />
-	<button type="submit" class="btn btn-small">Search</button>
-</form:form>
-</td>
-</tr>
-</table>
-<c:choose>
-	<c:when test="${mode eq 'list'}">
-		<c:if test="${not empty breadcrumb}">
-		<ul class="breadcrumb">
-			<c:forEach var="b" items="${breadcrumb}" varStatus="status">
-			<c:if test="${not status.last}">
-				<li><a href="
-						<portlet:renderURL>
-							<portlet:param name="action" value="list" />
-							<portlet:param name="intranetPath" value="${b.path}" />
-						</portlet:renderURL>"><c:out value="${b.title}" /></a>
-						<span class="divider">></span>
-				</li>
-			</c:if>
-			<c:if test="${status.last}">
-				<li class="active">${b.title}</li>
-			</c:if>
-		</c:forEach>
-		</ul>
-		</c:if>	
-	</c:when>
-</c:choose>
+<%@ include file="/WEB-INF/jsp/breadcrumb.jsp"%>
+
 <table class="table table-hover">
 	<tr>
 		<th width="10"></th>
-		<th>Titre</th>
-		<th>Dernière modification</th>
-		<th>Auteur</th>
-		<th>Description</th>
+		<th><spring:message code="list.title" /></th>
+		<th><spring:message code="list.modified" /></th>
+		<th><spring:message code="list.creator" /></th>
+		<th><spring:message code="list.desc" /></th>
 	</tr>
 	<tbody>
 		<c:if test="${not empty docs}">
@@ -78,7 +48,7 @@
 							">${doc.title}</a>
 						</c:otherwise>
 					</c:choose></td>
-				<td> ${esup:getLastModified(doc.properties, 'dc:modified')}</td>
+				<td> ${esup:getLastModifiedDate(doc.properties)}</td>
 				<td>${esup:getValue(doc.properties, 'dc:creator')}</td>
 				<td>${esup:getValue(doc.properties, 'dc:description')}</td>
 			</tr>
