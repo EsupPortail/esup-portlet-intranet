@@ -40,9 +40,7 @@ public class WebController extends AbastractExceptionController{
 	}
 	@Autowired
 	private Authenticator authenticator;
-	@Autowired
-	private EditWebController editController;
-	
+		
 	public void setAuthenticator(Authenticator authenticator) {
 		this.authenticator = authenticator;
 	}
