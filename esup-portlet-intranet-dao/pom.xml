@@ -4,10 +4,10 @@
     <parent>
         <artifactId>esup-portlet-intranet</artifactId>
         <groupId>org.esupportail</groupId>
-        <version>0.2</version>
+        <version>0.3-SNAPSHOT</version>
     </parent>
     <artifactId>esup-portlet-intranet-dao</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1-SNAPSHOT</version>
     <description>couche d'accès aux données</description>
     <dependencies>
         <dependency>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.esupportail</groupId>
             <artifactId>esup-portlet-intranet-domain-beans</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
