@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+    
+    <description>JSTL 1.1 functions library</description>
+    <display-name>JSTL functions</display-name>
+    <tlib-version>1.1</tlib-version>
+    <short-name>esup</short-name>
+    <uri>http://esup.org/jsp/jstl/nuxeo/functions</uri>
+    
+    <function>
+        <description> Get the value of PropertyMap using key </description>
+        <name>getValue</name>
+        <function-class>org.esup.portlet.intranet.taglib.NuxeoTagLib</function-class>
+        <function-signature>String getValue(org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap, java.lang.String)</function-signature>
+        <example>
+            ${esup:getValue(obj, 'java.lang.String')}
+        </example>
+    </function>
+    
+    <function>
+        <description> Get the last modified date from PropertyMap </description>
+        <name>getLastModifiedDate</name>
+        <function-class>org.esup.portlet.intranet.taglib.NuxeoTagLib</function-class>
+        <function-signature>String getLastModifiedDate(org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap)</function-signature>
+        <example>
+            ${esup:getLastModifiedDate(obj)}
+        </example>
+    </function>
+</taglib>

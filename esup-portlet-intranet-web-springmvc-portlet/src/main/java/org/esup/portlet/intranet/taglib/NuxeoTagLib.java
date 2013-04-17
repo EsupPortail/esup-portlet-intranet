@@ -1,0 +1,18 @@
+package org.esup.portlet.intranet.taglib;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
+import org.nuxeo.ecm.core.schema.utils.DateParser;
+
+public class NuxeoTagLib {
+	private static SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
+	public static String getValue(PropertyMap map, String key){
+		return map.getString(key);
+	}
+	public static String getLastModifiedDate(PropertyMap map){
+		Date d = DateParser.parseDate(map.getString("dc:modified"));
+		return sdf.format(d);
+	}
+}
