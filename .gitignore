@@ -3,4 +3,5 @@ target/
 .settings/
 .classpath
 .project
-logs/
+pom.xml.releaseBackup
+release.properties
