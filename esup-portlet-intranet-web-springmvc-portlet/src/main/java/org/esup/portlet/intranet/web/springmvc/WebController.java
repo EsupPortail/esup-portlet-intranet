@@ -50,10 +50,15 @@ public class WebController extends AbastractExceptionController{
 		return userSession;
 	}
     
+    @Autowired
+    private ViewSelectorDefault viewSelector;
+    
+    
+    
     @RenderMapping
     public ModelAndView init(RenderRequest request, RenderResponse response) throws Exception {
     	if(request.getPreferences().getValue("nuxeoHost",null).equals("${nuxeoHost}")){
-    		return new ModelAndView("init", null);
+    		return new ModelAndView(viewSelector.getViewName(request, "init"), null);
     	}
         return getList(request,response);
     }
@@ -66,7 +71,7 @@ public class WebController extends AbastractExceptionController{
     	model.put("docs", nuxeoService.getList(userSession, intranetPath));
     	model.put("mode", "list");
     	setBreadcrumb(model,intranetPath);
-        return new ModelAndView("view", model);
+        return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }
 
     @ActionMapping(params="action=search")
@@ -81,7 +86,7 @@ public class WebController extends AbastractExceptionController{
     	model.put("docs", nuxeoService.search(userSession, key));
     	model.put("mode", request.getParameter("action"));
     	setBreadcrumb(model);
-        return new ModelAndView("view", model);
+        return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }	
     
     @RenderMapping(params="action=new")
@@ -90,7 +95,7 @@ public class WebController extends AbastractExceptionController{
     	ModelMap model = new ModelMap();
      	model.put("docs", nuxeoService.getNews(userSession));
      	model.put("mode", request.getParameter("action"));
-        return new ModelAndView("view", model);
+        return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }
     
     @ResourceMapping

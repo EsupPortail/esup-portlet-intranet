@@ -22,10 +22,14 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller
 @RequestMapping(value = "EDIT")
 public class EditWebController extends AbastractExceptionController{
+	
 	@Autowired
 	private NuxeoResource userSession;
 	@Autowired
 	private Authenticator authenticator;
+    @Autowired
+    private ViewSelectorDefault viewSelector;
+    
 	@RenderMapping
     public ModelAndView editPreferences(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
@@ -33,7 +37,7 @@ public class EditWebController extends AbastractExceptionController{
     	model.put("nuxeoHost",prefs.getValue("nuxeoHost", null));
     	model.put("intranetPath",prefs.getValue("intranetPath", null));
     	model.put("nuxeoPortalAuthSecret",prefs.getValue("nuxeoPortalAuthSecret", null));
-        return new ModelAndView("edit", model);
+        return new ModelAndView(viewSelector.getViewName(request, "edit"), model);
     }
 	
 	@ActionMapping(params="action=edit")
