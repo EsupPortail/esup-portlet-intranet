@@ -2,6 +2,7 @@ package org.esup.portlet.intranet.web.springmvc;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -21,14 +22,12 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 public class EditWebController extends AbastractExceptionController{
 	
 	@RenderMapping
-    public ModelAndView editPreferences(@RequestParam(defaultValue="",required=false) String message, 
-    		RenderRequest request, RenderResponse response) throws Exception {
+    public ModelAndView editPreferences(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
     	PortletPreferences prefs = request.getPreferences();
     	model.put("nuxeoHost",prefs.getValue("nuxeoHost", null));
     	model.put("intranetPath",prefs.getValue("intranetPath", null));
     	model.put("nuxeoPortalAuthSecret",prefs.getValue("nuxeoPortalAuthSecret", null));
-    	model.put("message",message);
         return new ModelAndView("edit", model);
     }
 	
@@ -39,7 +38,7 @@ public class EditWebController extends AbastractExceptionController{
 		prefs.setValue("intranetPath", request.getParameter("intranetPath"));
 		prefs.setValue("nuxeoPortalAuthSecret", request.getParameter("nuxeoPortalAuthSecret"));
 		prefs.store();
-		response.setRenderParameter("message","editDone");
+		response.setPortletMode(PortletMode.VIEW);
 	}
 }
 

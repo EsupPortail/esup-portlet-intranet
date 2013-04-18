@@ -4,20 +4,20 @@
 	<parent>
 		<artifactId>esup-portlet-intranet</artifactId>
 		<groupId>org.esupportail</groupId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.2.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>esup-portlet-intranet-batch</artifactId>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.esupportail</groupId>
 			<artifactId>esup-portlet-intranet-dao</artifactId>
-			<version>0.2.1-SNAPSHOT</version>
+			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.esupportail</groupId>
 			<artifactId>esup-portlet-intranet-domain-services</artifactId>
-			<version>0.2.1-SNAPSHOT</version>
+			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.unitils</groupId>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>3.0.4.RELEASE</version>
+			<version>3.0.6.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
