@@ -7,11 +7,13 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.esup.portlet.intranet.services.auth.Authenticator;
+import org.esup.portlet.intranet.web.NuxeoResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
@@ -20,7 +22,10 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller
 @RequestMapping(value = "EDIT")
 public class EditWebController extends AbastractExceptionController{
-	
+	@Autowired
+	private NuxeoResource userSession;
+	@Autowired
+	private Authenticator authenticator;
 	@RenderMapping
     public ModelAndView editPreferences(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
@@ -38,6 +43,7 @@ public class EditWebController extends AbastractExceptionController{
 		prefs.setValue("intranetPath", request.getParameter("intranetPath"));
 		prefs.setValue("nuxeoPortalAuthSecret", request.getParameter("nuxeoPortalAuthSecret"));
 		prefs.store();
+		userSession.expireSession();
 		response.setPortletMode(PortletMode.VIEW);
 	}
 }
