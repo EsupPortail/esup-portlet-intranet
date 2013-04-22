@@ -37,7 +37,8 @@
             </preference>
             <preference>
                 <name>nuxeoPortalAuthSecret</name>
-                <value>${nuxeoPortalAuthSecret}</value>
+                <value>secret</value>
+                <read-only>true</read-only>
             </preference>
         </portlet-preferences>
     </portlet>

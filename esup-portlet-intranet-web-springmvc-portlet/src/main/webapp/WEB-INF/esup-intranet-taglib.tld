@@ -13,7 +13,7 @@
     <function>
         <description> Get the value of PropertyMap using key </description>
         <name>getValue</name>
-        <function-class>org.esup.portlet.intranet.taglib.NuxeoTagLib</function-class>
+        <function-class>org.esup.portlet.intranet.taglib.IntranetTagLib</function-class>
         <function-signature>String getValue(org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap, java.lang.String)</function-signature>
         <example>
             ${esup:getValue(obj, 'java.lang.String')}
@@ -23,7 +23,7 @@
     <function>
         <description> Get the last modified date from PropertyMap </description>
         <name>getLastModifiedDate</name>
-        <function-class>org.esup.portlet.intranet.taglib.NuxeoTagLib</function-class>
+        <function-class>org.esup.portlet.intranet.taglib.IntranetTagLib</function-class>
         <function-signature>String getLastModifiedDate(org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap)</function-signature>
         <example>
             ${esup:getLastModifiedDate(obj)}
