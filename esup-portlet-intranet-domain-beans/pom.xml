@@ -4,10 +4,10 @@
     <parent>
         <artifactId>esup-portlet-intranet</artifactId>
         <groupId>org.esupportail</groupId>
-        <version>0.2.1-SNAPSHOT</version>
+        <version>0.2.1</version>
     </parent>
     <artifactId>esup-portlet-intranet-domain-beans</artifactId>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.2.1</version>
     <description>The business object</description>
     <dependencies>
         <dependency>
