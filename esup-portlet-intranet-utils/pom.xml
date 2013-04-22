@@ -4,9 +4,9 @@
     <parent>
         <artifactId>esup-portlet-intranet</artifactId>
         <groupId>org.esupportail</groupId>
-        <version>0.2.1</version>
+        <version>0.2.2-SNAPSHOT</version>
     </parent>
     <artifactId>esup-portlet-intranet-utils</artifactId>
-  <version>0.2.1</version>
+  <version>0.2.2-SNAPSHOT</version>
     <description>couche utilitaire</description>
 </project>
