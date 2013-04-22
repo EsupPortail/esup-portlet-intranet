@@ -10,7 +10,7 @@
 <%@ taglib prefix="esup" uri="/WEB-INF/nuxeo-doc-taglib.tld" %>
 <portlet:defineObjects/>
 <c:set var="n"><portlet:namespace/></c:set>
-<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.css" />
+<%-- <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
-
+ --%>

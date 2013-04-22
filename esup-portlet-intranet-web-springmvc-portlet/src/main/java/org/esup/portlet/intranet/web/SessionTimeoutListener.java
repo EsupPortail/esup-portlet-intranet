@@ -2,7 +2,7 @@ package org.esup.portlet.intranet.web;
 
 import javax.servlet.http.HttpSessionEvent;
 
-import org.springframework.context.ApplicationContext;
+import org.esupportail.commons.context.ApplicationContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -12,8 +12,7 @@ public class SessionTimeoutListener extends HttpSessionEventPublisher{
 	@Override
 	public void sessionDestroyed(HttpSessionEvent event) {
 		
-		ApplicationContext appContext = ApplicationContextProvider.getAppContext();
-	    SessionRegistry sessionRegistry = appContext.getBean("sessionRegistry", SessionRegistry.class);	    
+	    SessionRegistry sessionRegistry = (SessionRegistry) ApplicationContextHolder.getContext().getBean("sessionRegistry");
 	    
 	    SessionInformation sessionInfo = (sessionRegistry != null ? 
 	    		sessionRegistry.getSessionInformation(event.getSession().getId()) : null);
