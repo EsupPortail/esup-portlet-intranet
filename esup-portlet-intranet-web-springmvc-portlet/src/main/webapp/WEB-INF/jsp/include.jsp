@@ -7,7 +7,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<%@ taglib prefix="esup" uri="/WEB-INF/nuxeo-doc-taglib.tld" %>
+<%@ taglib prefix="esup" uri="/WEB-INF/esup-intranet-taglib.tld" %>
 <portlet:defineObjects/>
 <c:set var="n"><portlet:namespace/></c:set>
 <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.css" />

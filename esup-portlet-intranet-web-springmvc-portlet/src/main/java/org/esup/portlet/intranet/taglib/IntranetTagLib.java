@@ -3,10 +3,12 @@ package org.esup.portlet.intranet.taglib;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.portlet.PortletPreferences;
+
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 import org.nuxeo.ecm.core.schema.utils.DateParser;
 
-public class NuxeoTagLib {
+public class IntranetTagLib {
 	private static SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
 	public static String getValue(PropertyMap map, String key){
 		return map.getString(key);

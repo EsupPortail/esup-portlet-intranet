@@ -30,18 +30,24 @@ public class EditWebController extends AbastractExceptionController{
     public ModelAndView editPreferences(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
     	PortletPreferences prefs = request.getPreferences();
-    	model.put("nuxeoHost",prefs.getValue("nuxeoHost", null));
-    	model.put("intranetPath",prefs.getValue("intranetPath", null));
-    	model.put("nuxeoPortalAuthSecret",prefs.getValue("nuxeoPortalAuthSecret", null));
+    	if(!prefs.isReadOnly("nuxeoHost")){
+    		model.put("nuxeoHost",prefs.getValue("nuxeoHost", null));
+    	}
+    	if(!prefs.isReadOnly("intranetPath")){
+    		model.put("intranetPath",prefs.getValue("intranetPath", null));
+    	}
         return new ModelAndView("edit", model);
     }
 	
 	@ActionMapping(params="action=edit")
 	public void searchDocs(ActionRequest request, ActionResponse response) throws Exception {
 		PortletPreferences prefs = request.getPreferences();
-		prefs.setValue("nuxeoHost", request.getParameter("nuxeoHost"));
-		prefs.setValue("intranetPath", request.getParameter("intranetPath"));
-		prefs.setValue("nuxeoPortalAuthSecret", request.getParameter("nuxeoPortalAuthSecret"));
+		if(!prefs.isReadOnly("nuxeoHost")){
+			prefs.setValue("nuxeoHost", request.getParameter("nuxeoHost"));
+    	}
+    	if(!prefs.isReadOnly("intranetPath")){
+    		prefs.setValue("intranetPath", request.getParameter("intranetPath"));
+    	}
 		prefs.store();
 		userSession.expireSession();
 		response.setPortletMode(PortletMode.VIEW);
