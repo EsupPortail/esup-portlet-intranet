@@ -4,7 +4,7 @@
     <parent>
         <artifactId>esup-portlet-intranet</artifactId>
         <groupId>org.esupportail</groupId>
-        <version>0.2.2-SNAPSHOT</version>
+        <version>0.2.2</version>
     </parent>
     <artifactId>esup-portlet-intranet-web-springmvc-portlet</artifactId>
     <packaging>war</packaging>
@@ -160,7 +160,7 @@
 		<dependency>
             <groupId>org.esupportail</groupId>
             <artifactId>esup-portlet-intranet-domain-services</artifactId>
-            <version>0.2.2-SNAPSHOT</version>
+            <version>0.2.2</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
