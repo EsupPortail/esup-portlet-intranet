@@ -71,8 +71,17 @@ public class NuxeoServiceImpl implements NuxeoService{
 	
 	@Override
 	public Documents search(boolean isMobile, NuxeoResource nuxeoResource, String key) throws Exception {
-		String query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
-				+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
+		
+		String query;
+		if(isMobile){
+			//Se limiter aux documents et pas les dossiers (la vue desktop propose aussi les dossiers)
+			query = "SELECT * FROM Document WHERE (ecm:primaryType <> 'Folder') AND (ecm:fulltext = \"" + key
+					+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
+		}else{
+			query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
+					+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
+		}
+		
 		return queryList(nuxeoResource, query);
 	}
 
