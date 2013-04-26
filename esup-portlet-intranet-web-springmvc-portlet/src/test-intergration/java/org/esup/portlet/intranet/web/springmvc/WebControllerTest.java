@@ -12,12 +12,10 @@ public class WebControllerTest extends BaseTestCase{
 	@Test
 	public void testWebController() throws Exception{
 		MockRenderRequest request = new MockRenderRequest();
-		request.getPortletSession().setMaxInactiveInterval(10);
 		request.setPreferences(prefs);
 		request.setAttribute("prefs", prefs);
 		request.setAttribute("key", "jed");
 		MockRenderResponse response = new MockRenderResponse();
-		
 		ModelAndView mv = webController.getList(request, response);
 		
 		printDocs("searchDocs", (Documents)mv.getModel().get("docs"));

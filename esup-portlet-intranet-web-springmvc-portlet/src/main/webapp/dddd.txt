@@ -1,0 +1,98 @@
+<div data-role="page" id="main">	
+	<div data-role="header" style="overflow:hidden;">
+	    <h1>Nuxeo Documents</h1>
+	    <div data-role="navbar" >
+	        <ul>
+	        	<c:choose>
+					<c:when test="${mode eq 'new'}">
+						<li><a href="${homeUrl}" data-icon="bars">Intranet</a></li>
+						<li><a href="#search" data-icon="search"><spring:message code="button.search" /></a></li>
+						<li><a href="${newUrl}" data-icon="star" class="ui-btn-active"><spring:message code="menu.new" /></a></li>		
+					</c:when>
+					<c:otherwise>
+						<li><a href="${homeUrl}" data-icon="bars" class="ui-btn-active">Intranet</a></li>
+						<li><a href="#search" data-icon="search"><spring:message code="button.search" /></a></li>
+						<li><a href="${newUrl}" data-icon="star"><spring:message code="menu.new" /></a></li>
+					</c:otherwise>
+				</c:choose>
+	        </ul>
+	    </div><!-- /navbar -->
+	</div><!-- /header -->
+	<div data-role="content">
+	
+	<c:choose>
+		<c:when test="${mode eq 'list'}">
+			<c:if test="${not empty breadcrumb}">
+				<ul class="breadcrumb">
+					<c:forEach var="b" items="${breadcrumb}" varStatus="status">
+						<c:if test="${not status.last}">
+							<li><a
+								href="<portlet:renderURL>
+										<portlet:param name="action" value="list" />
+										<portlet:param name="intranetPath" value="${b.path}" />
+										</portlet:renderURL>"><c:out
+										value="${b.title}" /></a> <span class="divider">></span></li>
+						</c:if>
+						<c:if test="${status.last}">
+							<li class="active">${b.title}</li>
+						</c:if>
+					</c:forEach>
+				</ul>
+			</c:if>
+		</c:when>
+	</c:choose>
+	<c:if test="${not empty docs}">
+	<ul data-role="listview" data-inset="true">
+		<c:forEach var="doc" items="${docs}">
+			<c:choose>
+			<c:when test="${doc.type == 'File' || doc.type == 'Picture'}">
+				<li data-icon="false"><a href="
+					<portlet:resourceURL >
+						<portlet:param name="action" value="file" />
+						<portlet:param name="filePath" value="${doc.path}" />
+					</portlet:resourceURL>
+				"><img src="<%=request.getContextPath()%>/icons/${esup:getImgFileName(doc.title)}" alt="pdf" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+			</c:when>
+			<c:otherwise>
+				<li><a href="
+					<portlet:renderURL>
+						<portlet:param name="action" value="list" />
+						<portlet:param name="intranetPath" value="${doc.path}" />
+					</portlet:renderURL>
+				"><img src="<%=request.getContextPath()%>/icons/folder.gif" alt="pdf" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+			</c:otherwise>
+			</c:choose>
+		</c:forEach>
+	</ul>
+	</c:if>
+	</div>
+</div>
+
+<div data-role="page" id="search" data-add-back-btn=true>
+	<div data-role="header">
+		<h1><spring:message code="button.search" /></h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<form:form name="searchForm" method="post" action="${searchUrl}" class="form-inline">
+			<input type="text" name="key" class="input" />
+			<button type="submit" class="btn btn-small"><spring:message code="button.search" /></button>
+		</form:form>
+	</div><!-- /content -->
+</div>
+
+
+    	Enumeration<String> e = request.getAttributeNames();
+    	
+    	
+    	
+    	
+    	
+    	System.out.println(request.getAttribute("javax.servlet.include.servlet_path"));
+    	System.out.println(request.getAttribute("javax.servlet.forward.request_uri"));
+    	System.out.println( request.getAttribute("javax.servlet.include.context_path"));
+    	System.out.println( request.getAttribute("javax.servlet.forward.servlet_path"));
+    	System.out.println( request.getAttribute("org.apache.pluto.driver.core.PortalRequestContext"));
+    	System.out.println( request.getAttribute("javax.servlet.forward.context_path"));
+    	System.out.println( request.getAttribute("org.apache.pluto.driver.DynamicPortletTitle"));
+    	System.out.println(request.getPortalContext().getPortalInfo());

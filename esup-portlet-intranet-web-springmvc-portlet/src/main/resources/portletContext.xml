@@ -9,6 +9,16 @@
             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
             
+    <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:defaults.properties</value>
+				<value>classpath:config.properties</value>
+			</list>
+		</property>
+	</bean>
+    
     <!-- Annotations Configuration 	-->
     <context:annotation-config/>
     <context:component-scan base-package="org.esup.portlet.intranet.web"/>

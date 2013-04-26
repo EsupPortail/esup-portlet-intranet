@@ -44,7 +44,7 @@ public class EditWebController extends AbastractExceptionController{
     }
 	
 	@ActionMapping(params="action=edit")
-	public void searchDocs(ActionRequest request, ActionResponse response) throws Exception {
+	public void editPreferences(ActionRequest request, ActionResponse response) throws Exception {
 		PortletPreferences prefs = request.getPreferences();
 		if(!prefs.isReadOnly("nuxeoHost")){
 			prefs.setValue("nuxeoHost", request.getParameter("nuxeoHost"));

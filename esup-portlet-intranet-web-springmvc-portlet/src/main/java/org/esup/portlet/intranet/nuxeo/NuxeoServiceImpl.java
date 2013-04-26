@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NuxeoServiceImpl implements NuxeoService{
-    
+	
+	private String defaultCondition = "AND (ecm:mixinType != 'HiddenInNavigation') AND (ecm:currentLifeCycleState != 'deleted') ";
 	
 	private Documents queryList(NuxeoResource nuxeoResource, String query) throws Exception{
 		Session session = nuxeoResource.getNuxeoSession();
@@ -33,10 +34,8 @@ public class NuxeoServiceImpl implements NuxeoService{
 		Session session = nuxeoResource.getNuxeoSession();
 		Document root = (Document) session.newRequest(DocumentService.FetchDocument).set("value", intranetPath).execute();
 		if(root != null){
-			String query = "SELECT * FROM Document WHERE ecm:parentId = '"+root.getId()+"'";
-			Documents docs = (Documents) session.newRequest("Document.Query").setHeader(
-			        Constants.HEADER_NX_SCHEMAS, "*").set("query", query).execute();
-			return docs;
+			String query = "SELECT * FROM Document WHERE ecm:parentId = '"+root.getId()+"'" + defaultCondition + " ORDER BY dc:title";
+			return queryList(nuxeoResource, query);
 		}
 		return null;
 	}
@@ -60,27 +59,21 @@ public class NuxeoServiceImpl implements NuxeoService{
 
 	@Override
 	public Documents getNews(NuxeoResource nuxeoResource) throws Exception{
-		String query = "SELECT * FROM Document WHERE (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\")"
-				+ " AND (ecm:primaryType = 'File') ORDER BY dc:modified DESC ";
+		String query = "SELECT * FROM Document WHERE (ecm:primaryType <> 'Folder') AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\")"
+				+ defaultCondition +" ORDER BY dc:modified DESC ";
 		return queryList(nuxeoResource, query);
 	}
 
 	@Override
 	public Documents search(NuxeoResource nuxeoResource, String key) throws Exception{
-		String query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
-				+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") ORDER BY dc:modified DESC";
-		return queryList(nuxeoResource, query);
+		return search(false, nuxeoResource, key);
 	}
 	
 	@Override
-	public Documents getTree(NuxeoResource nuxeoResource) throws Exception {
-		Session session = nuxeoResource.getNuxeoSession();
-		Document root = (Document) session.newRequest(DocumentService.FetchDocument).set("value", nuxeoResource.getIntranetPath()).execute();
-		if(root != null){
-			Documents docs = (Documents) session.newRequest(DocumentService.GetDocumentChildren).setInput(root).execute();
-			return docs;
-		}
-		return null;
+	public Documents search(boolean isMobile, NuxeoResource nuxeoResource, String key) throws Exception {
+		String query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
+				+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
+		return queryList(nuxeoResource, query);
 	}
 
 }

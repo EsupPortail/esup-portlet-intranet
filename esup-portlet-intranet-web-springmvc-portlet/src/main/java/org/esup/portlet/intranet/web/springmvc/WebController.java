@@ -6,6 +6,7 @@ import java.io.OutputStream;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -15,9 +16,13 @@ import org.esup.portlet.intranet.nuxeo.NuxeoService;
 import org.esup.portlet.intranet.services.auth.Authenticator;
 import org.esup.portlet.intranet.web.Breadcrumb;
 import org.esup.portlet.intranet.web.NuxeoResource;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Document;
+import org.nuxeo.ecm.automation.client.jaxrs.model.Documents;
 import org.nuxeo.ecm.automation.client.jaxrs.model.FileBlob;
 import org.nuxeo.ecm.automation.client.jaxrs.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,6 +37,11 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 @Controller
 @RequestMapping(value = "VIEW")
 public class WebController extends AbastractExceptionController{
+	@Value("${rowcount}")
+	int rowcount;
+	
+	@Value("${rowcount.mobile}")
+	int rowcount_mobile;
 	
     @Autowired
     private NuxeoService nuxeoService;
@@ -40,24 +50,22 @@ public class WebController extends AbastractExceptionController{
 	}
 	@Autowired
 	private Authenticator authenticator;
-		
 	public void setAuthenticator(Authenticator authenticator) {
 		this.authenticator = authenticator;
 	}
+	
 	@Autowired
-	private NuxeoResource userSession;
-    public NuxeoResource getUserSession() {
-		return userSession;
+	private NuxeoResource nuxeoResource;
+    public void setNuxeoResource(NuxeoResource nuxeoResource) {
+		this.nuxeoResource = nuxeoResource;
 	}
     
-    @Autowired
+	@Autowired
     private ViewSelectorDefault viewSelector;
-    
-    
     
     @RenderMapping
     public ModelAndView init(RenderRequest request, RenderResponse response) throws Exception {
-    	if(request.getPreferences().getValue("nuxeoHost",null).equals("${nuxeoHost}")){
+    	if(shouldSetPreferences(request)){
     		return new ModelAndView(viewSelector.getViewName(request, "init"), null);
     	}
         return getList(request,response);
@@ -66,43 +74,67 @@ public class WebController extends AbastractExceptionController{
 	@RenderMapping(params="action=list")
     public ModelAndView getList(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
-    	userSession.init(request, authenticator);
+    	nuxeoResource.init(request, authenticator);
     	String intranetPath = request.getParameter("intranetPath");
-    	model.put("docs", nuxeoService.getList(userSession, intranetPath));
+    	model.put("docs", nuxeoService.getList(nuxeoResource, intranetPath));
     	model.put("mode", "list");
     	setBreadcrumb(model,intranetPath);
         return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }
+	
+	@RenderMapping(params="action=search-form")
+	public String showSearchForm(RenderRequest request) {
+		ModelMap model = new ModelMap();
+		model.put("mode", "search-form");
+		return viewSelector.getViewName(request, "search");
+	}
 
     @ActionMapping(params="action=search")
 	public void searchDocs(ActionRequest request, ActionResponse response) throws Exception {
-    	userSession.init(request, authenticator);
+    	nuxeoResource.init(request, authenticator);
     	response.setRenderParameter("key", request.getParameter("key"));
     	response.setRenderParameter("action","search");
 	}
 	@RenderMapping(params="action=search")
 	public ModelAndView searchDocs(@RequestParam(required=false) String key, RenderRequest request, RenderResponse response) throws Exception {
-    	ModelMap model =  new ModelMap();   	
-    	model.put("docs", nuxeoService.search(userSession, key));
-    	model.put("mode", request.getParameter("action"));
+    	ModelMap model =  new ModelMap(); 
+    	String viewName = viewSelector.getViewName(request, "view");
+    	boolean isMobileMode = viewName.startsWith("mobile");
+    	Documents docs = nuxeoService.search(isMobileMode, nuxeoResource, key);
+    	model.put("docs", docs);
+    	if(isMobileMode){
+    		viewName = viewSelector.getViewName(request, "search");
+    		model.put("rowCnt", rowcount_mobile); 
+    		model.put("leftCnt", docs.size()-rowcount_mobile);
+    	}
+    	model.put("mode", "search");
     	setBreadcrumb(model);
-        return new ModelAndView(viewSelector.getViewName(request, "view"), model);
+        return new ModelAndView(viewName, model);
     }	
     
     @RenderMapping(params="action=new")
     public ModelAndView getNew(RenderRequest request, RenderResponse response) throws Exception {
-    	userSession.init(request, authenticator);
+    	nuxeoResource.init(request, authenticator);
     	ModelMap model = new ModelMap();
-     	model.put("docs", nuxeoService.getNews(userSession));
-     	model.put("mode", request.getParameter("action"));
-        return new ModelAndView(viewSelector.getViewName(request, "view"), model);
+    	Documents docs = nuxeoService.getNews(nuxeoResource);
+    	String viewName = viewSelector.getViewName(request, "view");
+    	boolean isMobileMode = viewName.startsWith("mobile");
+    	PagedListHolder<Document> productList = new PagedListHolder<Document>(docs);
+    	if(!isMobileMode){
+    		productList.setPageSize(rowcount);
+    	}else{
+        	productList.setPageSize(rowcount_mobile);
+    	}
+    	model.put("docs", productList.getPageList());
+     	model.put("mode", "new");
+        return new ModelAndView(viewName, model);
     }
     
     @ResourceMapping
     public void fileDown(ResourceRequest request, ResourceResponse response) throws Exception {
-    	userSession.init(request, authenticator);
+    	nuxeoResource.init(request, authenticator);
     	String filePath = request.getParameter("filePath");
-    	FileBlob f = nuxeoService.getFile(userSession, filePath);
+    	FileBlob f = nuxeoService.getFile(nuxeoResource, filePath);
     	File file = f.getFile();
     	String fileName = f.getFileName();
     	
@@ -113,7 +145,6 @@ public class WebController extends AbastractExceptionController{
 			FileInputStream inStream = new FileInputStream(file);
 			String mimetype = f.getMimeType();
 			response.setContentType(mimetype);
-			f.setMimeType(mimetype);
 			response.setProperty("Content-disposition", "attachment; filename=\"" + fileName + "\"");
 			response.setContentLength((int) file.length());
 			
@@ -125,14 +156,25 @@ public class WebController extends AbastractExceptionController{
     }
     
 	private void setBreadcrumb(ModelMap model){
-    	setBreadcrumb(model, userSession.getIntranetPath());
+    	setBreadcrumb(model, nuxeoResource.getIntranetPath());
     }
     private void setBreadcrumb(ModelMap model, String intranetPath){
     	if(intranetPath == null)
-    		intranetPath = userSession.getIntranetPath();
+    		intranetPath = nuxeoResource.getIntranetPath();
     	Breadcrumb b = new Breadcrumb();
-		b.setBreadcrumb(userSession.getRootPath(), intranetPath);
+		b.setBreadcrumb(nuxeoResource.getRootPath(), intranetPath);
 		model.put("breadcrumb", b.getPathList());
+    }
+    
+    private boolean shouldSetPreferences(RenderRequest request){
+    	PortletPreferences prefs = request.getPreferences();
+    	if(!prefs.isReadOnly("nuxeoHost") && prefs.getValue("nuxeoHost","${nuxeoHost}").equals("${nuxeoHost}")){
+    		return true;
+    	}
+    	if(!prefs.isReadOnly("intranetPath") && prefs.getValue("intranetPath","${intranetPath}").equals("${intranetPath}")){
+    		return true;
+    	}
+    	return false;
     }
     
 }

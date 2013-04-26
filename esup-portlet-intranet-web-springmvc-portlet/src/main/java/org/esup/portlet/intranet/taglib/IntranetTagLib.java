@@ -3,8 +3,6 @@ package org.esup.portlet.intranet.taglib;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.portlet.PortletPreferences;
-
 import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
 import org.nuxeo.ecm.core.schema.utils.DateParser;
 
@@ -16,5 +14,12 @@ public class IntranetTagLib {
 	public static String getLastModifiedDate(PropertyMap map){
 		Date d = DateParser.parseDate(map.getString("dc:modified"));
 		return sdf.format(d);
+	}
+	public static String getImgFileName(String fileName){
+		if(fileName.contains(".")){
+			String type = fileName.substring(fileName.lastIndexOf(".")+1);
+			return type +".png";
+		}
+		return "dontKnow.png";
 	}
 }

@@ -3,8 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util" 
        xsi:schemaLocation="
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 	
 	<bean id="propertyConfigurer"
@@ -25,11 +27,34 @@
 	        </map>
 	    </property>
 	</bean>
+	
+	<!-- 
+     | Standard JSP view resolver
+     +-->
+    <bean id="viewResolver"
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        p:order="10" 
+        p:cache="true" 
+        p:viewClass="org.springframework.web.servlet.view.JstlView"
+        p:prefix="/WEB-INF/jsp/" 
+        p:suffix=".jsp"/>
+        
  	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 	<import resource="classpath*:META-INF/esup-portlet-intranet-domain-services-auth.xml" />
+ 	<bean id="app_context" class="org.esupportail.commons.context.ApplicationContextHolder" />
+ 	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
  	
  	<context:annotation-config/>
  	<context:component-scan base-package="org.esup.portlet.intranet.nuxeo"/>
  	<context:component-scan base-package="org.esup.portlet.intranet.web" />
+ 	
+ 	<!-- Regexes of mobile device user agents -->
+	<util:list id="mobileDeviceRegexes">
+	    <value>.*iPhone.*</value>
+	    <value>.*Android.*</value>
+	    <value>.*IEMobile.*</value>
+	    <value>.*Safari.*Pre.*</value>
+	    <value>.*Nokia.*AppleWebKit.*</value>
+	</util:list>
 
 </beans>
