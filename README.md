@@ -12,9 +12,9 @@ It is a portlet client for [uPortal](https://github.com/EsupPortail/esup-uportal
 4. Don't forget editing preferences (see bellow).
 
 ## Preferences
-+ nuxeoHost(Nuxeo URL) : Editable, ex:) http://localhost:8080/nuxeo
-+ intranetPath(The Nuxeo path used as root content) : Editable, ex:) /default-domain/workspaces/foo
-+ nuxeoPortalAuthSecret(Secret used by Nuxeo [portal-sso](http://www.esup-portail.org/pages/viewpage.action?pageId=201097232) authentication layer) : No Editable, ex:) ITJDrjUWLGZ1fNSil795
++ nuxeoHost(Nuxeo URL) : editable, ex:) http://localhost:8080/nuxeo
++ intranetPath(The Nuxeo path used as root content) : editable, ex:) /default-domain/workspaces/foo
++ nuxeoPortalAuthSecret(Secret used by Nuxeo [portal-sso](http://www.esup-portail.org/pages/viewpage.action?pageId=201097232) authentication layer) : No editable, ex:) ITJDrjUWLGZ1fNSil795
 
 ============
 "Editable" is useful uniquely if uPortal administrator add edit capability to the portlet.
