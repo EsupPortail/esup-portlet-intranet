@@ -28,11 +28,11 @@ public class NuxeoServiceImpl implements NuxeoService{
 	}
 
 	@Override
-	public Documents getList(NuxeoResource nuxeoResource, String intranetPath) throws Exception{
-		if (intranetPath == null)
-			intranetPath = nuxeoResource.getIntranetPath();
+	public Documents getList(NuxeoResource nuxeoResource, String id) throws Exception{
+		if (id == null)
+			id = nuxeoResource.getIntranetPath();
 		Session session = nuxeoResource.getNuxeoSession();
-		Document root = (Document) session.newRequest(DocumentService.FetchDocument).set("value", intranetPath).execute();
+		Document root = (Document) session.newRequest(DocumentService.FetchDocument).set("value", id).execute();
 		if(root != null){
 			String query = "SELECT * FROM Document WHERE ecm:parentId = '"+root.getId()+"'" + defaultCondition + " ORDER BY dc:title";
 			return queryList(nuxeoResource, query);
@@ -41,11 +41,11 @@ public class NuxeoServiceImpl implements NuxeoService{
 	}
 	
 	@Override
-	public FileBlob getFile(NuxeoResource nuxeoResource, String filePath) throws Exception{
+	public FileBlob getFile(NuxeoResource nuxeoResource, String uid) throws Exception{
 		Session session = nuxeoResource.getNuxeoSession();
 		// Get the file document where blob was attached
 		Document doc = (Document) session.newRequest(DocumentService.FetchDocument).setHeader(
-		        Constants.HEADER_NX_SCHEMAS, "*").set("value", filePath).execute();
+		        Constants.HEADER_NX_SCHEMAS, "*").set("value", uid).execute();
 		
 		// get the file content property
 		PropertyMap map = doc.getProperties().getMap("file:content");
@@ -65,22 +65,18 @@ public class NuxeoServiceImpl implements NuxeoService{
 	}
 
 	@Override
-	public Documents search(NuxeoResource nuxeoResource, String key) throws Exception{
-		return search(false, nuxeoResource, key);
-	}
-	
-	@Override
-	public Documents search(boolean isMobile, NuxeoResource nuxeoResource, String key) throws Exception {
+	public Documents search(NuxeoResource nuxeoResource, String key) throws Exception {
 		
-		String query;
-		if(isMobile){
-			//Se limiter aux documents et pas les dossiers (la vue desktop propose aussi les dossiers)
-			query = "SELECT * FROM Document WHERE (ecm:primaryType <> 'Folder') AND (ecm:fulltext = \"" + key
-					+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
-		}else{
-			query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
-					+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
-		}
+		String query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
+				+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
+//		if(isMobile){
+//			//Se limiter aux documents et pas les dossiers (la vue desktop propose aussi les dossiers)
+//			query = "SELECT * FROM Document WHERE (ecm:primaryType <> 'Folder') AND (ecm:fulltext = \"" + key
+//					+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
+//		}else{
+//			query = "SELECT * FROM Document WHERE (ecm:fulltext = \"" + key
+//					+ "\") AND (ecm:isCheckedInVersion = 0) AND (ecm:path STARTSWITH \"" + nuxeoResource.getIntranetPath() + "\") "+ defaultCondition +" ORDER BY dc:modified DESC";
+//		}
 		
 		return queryList(nuxeoResource, query);
 	}

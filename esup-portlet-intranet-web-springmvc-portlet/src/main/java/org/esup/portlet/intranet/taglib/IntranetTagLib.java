@@ -15,11 +15,7 @@ public class IntranetTagLib {
 		Date d = DateParser.parseDate(map.getString("dc:modified"));
 		return sdf.format(d);
 	}
-	public static String getImgFileName(String fileName){
-		if(fileName.contains(".")){
-			String type = fileName.substring(fileName.lastIndexOf(".")+1);
-			return type +".png";
-		}
-		return "dontKnow.png";
+	public static String getImgFileName(PropertyMap map){
+		return map.getString("common:icon");
 	}
 }

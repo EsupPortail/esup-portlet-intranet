@@ -3,6 +3,7 @@ package org.esup.portlet.intranet.web.springmvc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -74,17 +75,20 @@ public class WebController extends AbastractExceptionController{
 	@RenderMapping(params="action=list")
     public ModelAndView getList(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
+    	model.put("isuPortal", request.getPortalContext().getPortalInfo().contains("uPortal"));
     	nuxeoResource.init(request, authenticator);
     	String intranetPath = request.getParameter("intranetPath");
+    	if(intranetPath != null)
+    		intranetPath = new String(intranetPath.getBytes("ISO-8859-1"), Charset.forName("UTF-8"));
     	model.put("docs", nuxeoService.getList(nuxeoResource, intranetPath));
     	model.put("mode", "list");
     	setBreadcrumb(model,intranetPath);
         return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }
-	
 	@RenderMapping(params="action=search-form")
 	public String showSearchForm(RenderRequest request) {
 		ModelMap model = new ModelMap();
+		model.put("isuPortal", request.getPortalContext().getPortalInfo().contains("uPortal"));
 		model.put("mode", "search-form");
 		return viewSelector.getViewName(request, "search");
 	}
@@ -98,9 +102,12 @@ public class WebController extends AbastractExceptionController{
 	@RenderMapping(params="action=search")
 	public ModelAndView searchDocs(@RequestParam(required=false) String key, RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model =  new ModelMap(); 
+    	model.put("isuPortal", request.getPortalContext().getPortalInfo().contains("uPortal"));
     	String viewName = viewSelector.getViewName(request, "view");
     	boolean isMobileMode = viewName.startsWith("mobile");
-    	Documents docs = nuxeoService.search(isMobileMode, nuxeoResource, key);
+    	if(key != null)
+    		key = new String(key.getBytes("ISO-8859-1"), Charset.forName("UTF-8"));
+    	Documents docs = nuxeoService.search(nuxeoResource, key);
     	model.put("docs", docs);
     	if(isMobileMode){
     		viewName = viewSelector.getViewName(request, "search");
@@ -116,6 +123,7 @@ public class WebController extends AbastractExceptionController{
     public ModelAndView getNew(RenderRequest request, RenderResponse response) throws Exception {
     	nuxeoResource.init(request, authenticator);
     	ModelMap model = new ModelMap();
+    	model.put("isuPortal", request.getPortalContext().getPortalInfo().contains("uPortal"));
     	Documents docs = nuxeoService.getNews(nuxeoResource);
     	String viewName = viewSelector.getViewName(request, "view");
     	boolean isMobileMode = viewName.startsWith("mobile");
@@ -133,8 +141,8 @@ public class WebController extends AbastractExceptionController{
     @ResourceMapping
     public void fileDown(ResourceRequest request, ResourceResponse response) throws Exception {
     	nuxeoResource.init(request, authenticator);
-    	String filePath = request.getParameter("filePath");
-    	FileBlob f = nuxeoService.getFile(nuxeoResource, filePath);
+    	String uid = request.getParameter("uid");
+    	FileBlob f = nuxeoService.getFile(nuxeoResource, uid);
     	File file = f.getFile();
     	String fileName = f.getFileName();
     	
@@ -176,5 +184,4 @@ public class WebController extends AbastractExceptionController{
     	}
     	return false;
     }
-    
 }

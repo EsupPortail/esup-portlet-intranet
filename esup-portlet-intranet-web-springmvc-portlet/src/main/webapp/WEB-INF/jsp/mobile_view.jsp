@@ -21,7 +21,7 @@
 			</c:if>
 		</c:when>
 	</c:choose>
-	
+	fffééé
 	<c:if test="${not empty docs}">
 	<ul data-role="listview" data-inset="true">
 		<c:forEach var="doc" items="${docs}">
@@ -30,9 +30,9 @@
 				<li data-icon="false"><a href="
 					<portlet:resourceURL >
 						<portlet:param name="action" value="file" />
-						<portlet:param name="filePath" value="${doc.path}" />
+						<portlet:param name="uid" value="${doc.id}" />
 					</portlet:resourceURL>
-				"><img src="<%=request.getContextPath()%>/img/filetype-icons/${esup:getImgFileName(doc.title)}" alt="pdf" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+				"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
 			</c:when>
 			<c:otherwise>
 				<li><a href="
