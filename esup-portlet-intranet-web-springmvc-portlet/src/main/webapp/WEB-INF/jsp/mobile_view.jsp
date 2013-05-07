@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/jsp/mobile_header.jsp"%>
-
     <c:choose>
 		<c:when test="${mode eq 'list'}">
 			<c:if test="${not empty breadcrumb}">
@@ -21,7 +20,6 @@
 			</c:if>
 		</c:when>
 	</c:choose>
-	fffייי
 	<c:if test="${not empty docs}">
 	<ul data-role="listview" data-inset="true">
 		<c:forEach var="doc" items="${docs}">

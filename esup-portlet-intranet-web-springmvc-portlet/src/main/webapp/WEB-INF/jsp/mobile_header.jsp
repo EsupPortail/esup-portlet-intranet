@@ -8,6 +8,7 @@
 	<div data-role="page">
 </c:if>
 <div data-role="content"><!-- content/ -->
+
 	<div class="ui-body-d ui-body" ><!-- container/ -->
     <div data-role="navbar" class="nav-glyphish">
     	<ul>

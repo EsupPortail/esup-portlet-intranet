@@ -86,11 +86,11 @@ public class WebController extends AbastractExceptionController{
         return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }
 	@RenderMapping(params="action=search-form")
-	public String showSearchForm(RenderRequest request) {
+	public ModelAndView showSearchForm(RenderRequest request) {
 		ModelMap model = new ModelMap();
 		model.put("isuPortal", request.getPortalContext().getPortalInfo().contains("uPortal"));
 		model.put("mode", "search-form");
-		return viewSelector.getViewName(request, "search");
+		return new ModelAndView(viewSelector.getViewName(request, "search"), model);
 	}
 
     @ActionMapping(params="action=search")

@@ -5,6 +5,6 @@
     <a href="${editPreferencesUrl}" data-icon="gear">EDIT mode</a>
 </div> --%>
 
-<%if(!request.getAttribute("javax.portlet.request").toString().contains("org.jasig.portal.portlet.container")){%>
+<c:if test="${not isuPortal}">
 	</div>
-<%}%>
+</c:if>

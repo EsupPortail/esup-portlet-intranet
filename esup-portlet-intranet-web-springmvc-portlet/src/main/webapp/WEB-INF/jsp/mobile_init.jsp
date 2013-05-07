@@ -15,9 +15,9 @@
 	</div>
 </div>
 
-<div data-role="footer" class="ui-bar" data-position="fixed">
+<%-- <div data-role="footer" class="ui-bar" data-position="fixed">
     <a href="${editPreferencesUrl}" data-icon="plus">EDIT mode</a>
-</div>
+</div> --%>
 
 <%if(!request.getAttribute("javax.portlet.request").toString().contains("org.jasig.portal.portlet.container")){%>
 	</div>
