@@ -13,7 +13,7 @@
 							<portlet:param name="action" value="file" />
 							<portlet:param name="filePath" value="${doc.path}" />
 						</portlet:resourceURL>
-					"><img src="<%=request.getContextPath()%>/img/icons/${esup:getImgFileName(doc.properties)}" alt="pdf" 
+					"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" alt="pdf" 
 						class="ui-li-icon ui-corner-none">${doc.title}</a></li>
 			</c:forEach>
 		</ul>
@@ -31,7 +31,7 @@
 								<portlet:param name="action" value="file" />
 								<portlet:param name="filePath" value="${doc.path}" />
 							</portlet:resourceURL>
-						"><img src="<%=request.getContextPath()%>/img/icons/${esup:getImgFileName(doc.properties)}" alt="pdf" 
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" alt="pdf" 
 							class="ui-li-icon ui-corner-none">${doc.title}</a></li>
 						</c:forEach>
 					</ul>
