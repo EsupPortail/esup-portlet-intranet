@@ -2,7 +2,7 @@ package org.esup.portlet.intranet;
 
 import org.esup.portlet.intranet.nuxeo.NuxeoServiceImpl;
 import org.esup.portlet.intranet.services.auth.MockAuthenticator;
-import org.esup.portlet.intranet.web.springmvc.WebController;
+import org.esup.portlet.intranet.web.springmvc.TestWebController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,13 +26,11 @@ public class BaseTestCase {
 	@Value("${userId}")
 	String userId;
 	
-	@Autowired
-	protected NuxeoServiceImpl nuxeoService;	
+	@Autowired protected NuxeoServiceImpl nuxeoService;	
+	@Autowired protected TestWebController webController;
 	
 	protected MockAuthenticator authenticator;
 	
-	@Autowired
-	protected WebController webController;
 	String key = "jed";
 	
 	protected MockPortletPreferences prefs;

@@ -7,7 +7,7 @@ import org.springframework.mock.web.portlet.MockRenderRequest;
 import org.springframework.mock.web.portlet.MockRenderResponse;
 import org.springframework.web.portlet.ModelAndView;
 
-public class WebControllerTest extends BaseTestCase{
+public class TestCaseWebController extends BaseTestCase{
 
 	@Test
 	public void testWebController() throws Exception{

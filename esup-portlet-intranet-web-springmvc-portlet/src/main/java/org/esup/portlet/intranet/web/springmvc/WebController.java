@@ -3,7 +3,6 @@ package org.esup.portlet.intranet.web.springmvc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -44,47 +43,33 @@ public class WebController extends AbastractExceptionController{
 	@Value("${rowcount.mobile}")
 	int rowcount_mobile;
 	
-    @Autowired
-    private NuxeoService nuxeoService;
-	public void setNuxeoService(NuxeoService nuxeoService) {
-		this.nuxeoService = nuxeoService;
-	}
-	@Autowired
-	private Authenticator authenticator;
-	public void setAuthenticator(Authenticator authenticator) {
-		this.authenticator = authenticator;
-	}
-	
-	@Autowired
-	private NuxeoResource nuxeoResource;
-    public void setNuxeoResource(NuxeoResource nuxeoResource) {
-		this.nuxeoResource = nuxeoResource;
-	}
-    
-	@Autowired
-    private ViewSelectorDefault viewSelector;
+    @Autowired private NuxeoService nuxeoService;
+	@Autowired private Authenticator authenticator;
+	@Autowired private NuxeoResource nuxeoResource;
+	@Autowired private ViewSelectorDefault viewSelector;
     
     @RenderMapping
-    public ModelAndView init(RenderRequest request, RenderResponse response) throws Exception {
-    	if(shouldSetPreferences(request)){
+    public ModelAndView welcome(RenderRequest request, RenderResponse response) throws Exception {
+    	PortletPreferences prefs = request.getPreferences();
+    	if(!prefs.isReadOnly("nuxeoHost") && prefs.getValue("nuxeoHost","${nuxeoHost}").equals("${nuxeoHost}") || 
+    			!prefs.isReadOnly("intranetPath") && prefs.getValue("intranetPath","${intranetPath}").equals("${intranetPath}")){
     		return new ModelAndView(viewSelector.getViewName(request, "init"), null);
     	}
-        return getList(request,response);
+    	return getList(request,response);
     }
     
 	@RenderMapping(params="action=list")
     public ModelAndView getList(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
     	model.put("isuPortal", request.getPortalContext().getPortalInfo().contains("uPortal"));
-    	nuxeoResource.init(request, authenticator);
+    	nuxeoResource.setResource(request, authenticator);
     	String intranetPath = request.getParameter("intranetPath");
-    	if(intranetPath != null)
-    		intranetPath = new String(intranetPath.getBytes("ISO-8859-1"), Charset.forName("UTF-8"));
     	model.put("docs", nuxeoService.getList(nuxeoResource, intranetPath));
     	model.put("mode", "list");
     	setBreadcrumb(model,intranetPath);
         return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }
+	
 	@RenderMapping(params="action=search-form")
 	public ModelAndView showSearchForm(RenderRequest request) {
 		ModelMap model = new ModelMap();
@@ -95,18 +80,17 @@ public class WebController extends AbastractExceptionController{
 
     @ActionMapping(params="action=search")
 	public void searchDocs(ActionRequest request, ActionResponse response) throws Exception {
-    	nuxeoResource.init(request, authenticator);
+    	nuxeoResource.setResource(request, authenticator);
     	response.setRenderParameter("key", request.getParameter("key"));
     	response.setRenderParameter("action","search");
 	}
+    
 	@RenderMapping(params="action=search")
 	public ModelAndView searchDocs(@RequestParam(required=false) String key, RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model =  new ModelMap(); 
     	model.put("isuPortal", request.getPortalContext().getPortalInfo().contains("uPortal"));
     	String viewName = viewSelector.getViewName(request, "view");
     	boolean isMobileMode = viewName.startsWith("mobile");
-    	if(key != null)
-    		key = new String(key.getBytes("ISO-8859-1"), Charset.forName("UTF-8"));
     	Documents docs = nuxeoService.search(nuxeoResource, key);
     	model.put("docs", docs);
     	if(isMobileMode){
@@ -121,7 +105,7 @@ public class WebController extends AbastractExceptionController{
     
     @RenderMapping(params="action=new")
     public ModelAndView getNew(RenderRequest request, RenderResponse response) throws Exception {
-    	nuxeoResource.init(request, authenticator);
+    	nuxeoResource.setResource(request, authenticator);
     	ModelMap model = new ModelMap();
     	model.put("isuPortal", request.getPortalContext().getPortalInfo().contains("uPortal"));
     	Documents docs = nuxeoService.getNews(nuxeoResource);
@@ -140,7 +124,7 @@ public class WebController extends AbastractExceptionController{
     
     @ResourceMapping
     public void fileDown(ResourceRequest request, ResourceResponse response) throws Exception {
-    	nuxeoResource.init(request, authenticator);
+    	nuxeoResource.setResource(request, authenticator);
     	String uid = request.getParameter("uid");
     	FileBlob f = nuxeoService.getFile(nuxeoResource, uid);
     	File file = f.getFile();
@@ -172,16 +156,5 @@ public class WebController extends AbastractExceptionController{
     	Breadcrumb b = new Breadcrumb();
 		b.setBreadcrumb(nuxeoResource.getRootPath(), intranetPath);
 		model.put("breadcrumb", b.getPathList());
-    }
-    
-    private boolean shouldSetPreferences(RenderRequest request){
-    	PortletPreferences prefs = request.getPreferences();
-    	if(!prefs.isReadOnly("nuxeoHost") && prefs.getValue("nuxeoHost","${nuxeoHost}").equals("${nuxeoHost}")){
-    		return true;
-    	}
-    	if(!prefs.isReadOnly("intranetPath") && prefs.getValue("intranetPath","${intranetPath}").equals("${intranetPath}")){
-    		return true;
-    	}
-    	return false;
     }
 }

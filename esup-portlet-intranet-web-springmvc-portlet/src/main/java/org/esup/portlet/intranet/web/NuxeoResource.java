@@ -36,7 +36,7 @@ public class NuxeoResource {
 	public Session getNuxeoSession() throws Exception{
 		return nuxeoSession;
 	}
-	public void init(PortletRequest request,Authenticator authenticator) throws Exception{
+	public void setResource(PortletRequest request,Authenticator authenticator) throws Exception{
 		if(!this.initialized){
 			this.prefs = request.getPreferences();
 			this.rootPath = prefs.getValue("intranetPath",null);
