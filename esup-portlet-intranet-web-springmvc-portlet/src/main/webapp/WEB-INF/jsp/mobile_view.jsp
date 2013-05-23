@@ -38,7 +38,7 @@
 						<portlet:param name="action" value="list" />
 						<portlet:param name="intranetPath" value="${doc.path}" />
 					</portlet:renderURL>
-				"><img src="<%=request.getContextPath()%>/img/filetype-icons/folder.gif" alt="pdf" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+				"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
 			</c:otherwise>
 			</c:choose>
 		</c:forEach>

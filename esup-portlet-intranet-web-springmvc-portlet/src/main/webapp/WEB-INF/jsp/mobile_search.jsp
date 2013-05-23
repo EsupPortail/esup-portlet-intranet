@@ -8,13 +8,24 @@
     <c:if test="${not empty docs}">
 		<ul data-role="listview" data-inset="true">
 			<c:forEach var="doc" items="${docs}" varStatus="stat" begin="0" end="${rowCnt-1}">
-				<li data-icon="false"><a href="
-						<portlet:resourceURL >
-							<portlet:param name="action" value="file" />
-							<portlet:param name="filePath" value="${doc.path}" />
-						</portlet:resourceURL>
-					"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" alt="pdf" 
-						class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+				<c:choose>
+					<c:when test="${doc.type == 'File' || doc.type == 'Picture'}">
+						<li data-icon="false"><a href="
+							<portlet:resourceURL >
+								<portlet:param name="action" value="file" />
+								<portlet:param name="uid" value="${doc.id}" />
+							</portlet:resourceURL>
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a href="
+							<portlet:renderURL>
+								<portlet:param name="action" value="list" />
+								<portlet:param name="intranetPath" value="${doc.path}" />
+							</portlet:renderURL>
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+					</c:otherwise>
+				</c:choose>
 			</c:forEach>
 		</ul>
 	</c:if>
@@ -26,13 +37,24 @@
 		        <p>
 					<ul data-role="listview" data-inset="false">
 						<c:forEach var="doc" items="${docs}" varStatus="stat" begin="${rowCnt}">
-							<li data-icon="false"><a href="
+				<c:choose>
+					<c:when test="${doc.type == 'File' || doc.type == 'Picture'}">
+						<li data-icon="false"><a href="
 							<portlet:resourceURL >
 								<portlet:param name="action" value="file" />
-								<portlet:param name="filePath" value="${doc.path}" />
+								<portlet:param name="uid" value="${doc.id}" />
 							</portlet:resourceURL>
-						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" alt="pdf" 
-							class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a href="
+							<portlet:renderURL>
+								<portlet:param name="action" value="list" />
+								<portlet:param name="intranetPath" value="${doc.path}" />
+							</portlet:renderURL>
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+					</c:otherwise>
+				</c:choose>
 						</c:forEach>
 					</ul>
 		        </p>
