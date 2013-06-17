@@ -1,9 +1,10 @@
 <%@ include file="/WEB-INF/jsp/mobile_header.jsp"%>
-    
-    <form:form name="searchForm" method="post" action="${searchUrl}" >
+<%@ include file="/WEB-INF/jsp/mobile_menu.jsp"%>    
+
+    <form name="searchForm" method="post" action="${searchUrl}" >
 		<input type="text" name="key"  />
-		<button type="submit"  ><spring:message code="button.search" /></button>
-	</form:form>
+		<button type="submit"><spring:message code="button.search" /></button>
+	</form>
     
     <c:if test="${not empty docs}">
 		<ul data-role="listview" data-inset="true">
@@ -15,7 +16,8 @@
 								<portlet:param name="action" value="file" />
 								<portlet:param name="uid" value="${doc.id}" />
 							</portlet:resourceURL>
-						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" 
+						      class="ui-li-icon ui-corner-none">${doc.title}</a></li>
 					</c:when>
 					<c:otherwise>
 						<li><a href="
@@ -23,7 +25,8 @@
 								<portlet:param name="action" value="list" />
 								<portlet:param name="intranetPath" value="${doc.path}" />
 							</portlet:renderURL>
-						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" 
+						      class="ui-li-icon ui-corner-none">${doc.title}</a></li>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -44,7 +47,8 @@
 								<portlet:param name="action" value="file" />
 								<portlet:param name="uid" value="${doc.id}" />
 							</portlet:resourceURL>
-						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" 
+						      class="ui-li-icon ui-corner-none">${doc.title}</a></li>
 					</c:when>
 					<c:otherwise>
 						<li><a href="
@@ -52,7 +56,8 @@
 								<portlet:param name="action" value="list" />
 								<portlet:param name="intranetPath" value="${doc.path}" />
 							</portlet:renderURL>
-						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" class="ui-li-icon ui-corner-none">${doc.title}</a></li>
+						"><img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" 
+						      class="ui-li-icon ui-corner-none">${doc.title}</a></li>
 					</c:otherwise>
 				</c:choose>
 						</c:forEach>

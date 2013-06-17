@@ -7,5 +7,5 @@
 <div class="control-group">
 	intranetPath : <input type="text" name="intranetPath" value="${intranetPath}" />
 </div>
-	<button type="submit" class="btn btn-small">Summit</button>
+	<button type="submit" class="btn btn-small">Submit</button>
 </form:form>

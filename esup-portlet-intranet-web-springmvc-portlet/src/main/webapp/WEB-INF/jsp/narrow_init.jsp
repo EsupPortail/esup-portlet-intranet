@@ -1,3 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
-<h3>Portlet Preferences are empty.</h3>
-<p class="text-info">Please go to 'EDIT' view</p>
+<p class="text-error">
+    <spring:message code="preferences.incorrect"/><br/>
+    <spring:message code="exception.contact.admin"/>
+</p>

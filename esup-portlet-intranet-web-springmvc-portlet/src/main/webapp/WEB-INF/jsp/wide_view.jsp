@@ -1,59 +1,8 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
-<link type="text/css" rel="stylesheet" href="${bootstrapCSS }" />
-<script type="text/javascript" src="${jqueryJS}"/>"></script>
+<script type="text/javascript" src="${jqueryJS}"/></script>
 
-<portlet:actionURL var="searchUrl">
-	<portlet:param name="action" value="search" />
-</portlet:actionURL>
-<portlet:renderURL var="homeUrl">
-	<portlet:param name="action" value="list" />
-</portlet:renderURL>
-<portlet:renderURL var="newUrl">
-	<portlet:param name="action" value="new" />
-</portlet:renderURL>
-
-<c:choose>
-	<c:when test="${mode eq 'new'}">
-		<a href="${homeUrl}" class="btn btn-small disabled"><spring:message code="menu.home" /></a>
-		<a href="${newUrl}" class="btn btn-small btn-primary disabled"><spring:message code="menu.new" /></a>		
-	</c:when>
-	<c:otherwise>
-		<a href="${homeUrl}" class="btn btn-small btn-primary disabled"><spring:message code="menu.home" /></a>
-		<a href="${newUrl}" class="btn btn-small disabled"><spring:message code="menu.new" /></a>
-	</c:otherwise>
-</c:choose>
-
-<table align="right">
-	<tr>
-		<td>
-			<form:form name="searchForm" method="post" action="${searchUrl}" class="form-inline">
-				<input type="text" name="key" class="input" />
-				<button type="submit" class="btn btn-small"><spring:message code="button.search" /></button>
-			</form:form>
-		</td>
-	</tr>
-</table>
-<c:choose>
-	<c:when test="${mode eq 'list'}">
-		<c:if test="${not empty breadcrumb}">
-			<ul class="breadcrumb">
-				<c:forEach var="b" items="${breadcrumb}" varStatus="status">
-					<c:if test="${not status.last}">
-						<li><a
-							href="<portlet:renderURL>
-									<portlet:param name="action" value="list" />
-									<portlet:param name="intranetPath" value="${b.path}" />
-									</portlet:renderURL>"><c:out
-									value="${b.title}" /></a> <span class="divider">></span></li>
-					</c:if>
-					<c:if test="${status.last}">
-						<li class="active">${b.title}</li>
-					</c:if>
-				</c:forEach>
-			</ul>
-		</c:if>
-	</c:when>
-</c:choose>
+<%@ include file="/WEB-INF/jsp/menu.jsp"%>
+<%@ include file="/WEB-INF/jsp/breadcrumb.jsp"%>
 
 <table class="table table-hover">
 	<tr>
