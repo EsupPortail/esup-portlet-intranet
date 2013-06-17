@@ -3,6 +3,8 @@ package org.esup.portlet.intranet.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.esup.portlet.intranet.NuxeoResource;
+
 public class Breadcrumb {
 	private List<HtmlCode> pathList = new ArrayList<HtmlCode>();
 	
@@ -10,7 +12,13 @@ public class Breadcrumb {
 		return pathList;
 	}
 
-	public void setBreadcrumb(String rootPath, String intranetpath) {
+	public void setBreadcrumb(NuxeoResource nuxeoResource) {
+		
+		pathList.clear();
+		
+		String rootPath = nuxeoResource.getRootPath();
+		String intranetpath = nuxeoResource.getIntranetPath();
+		
 		int slashIndex = rootPath.lastIndexOf('/');
 		int totalIndex = rootPath.length() - 1;
 		

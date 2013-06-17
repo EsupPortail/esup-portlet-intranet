@@ -2,6 +2,7 @@ package org.esup.portlet.intranet.web;
 
 import javax.servlet.http.HttpSessionEvent;
 
+import org.esup.portlet.intranet.NuxeoResource;
 import org.esupportail.commons.context.ApplicationContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
@@ -21,7 +22,7 @@ public class SessionTimeoutListener extends HttpSessionEventPublisher{
 	    	userSession = (NuxeoResource) sessionInfo.getPrincipal();
 	    }
 	    if (userSession != null) {
-	    	userSession.expireSession();
+	    	userSession.closeSession();
 	    }
 	    super.sessionDestroyed(event);
 	}
