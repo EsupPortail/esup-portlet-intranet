@@ -13,10 +13,6 @@
             <id>jlehtinen.net</id>
             <url>http://repo.jlehtinen.net/maven2/</url>
         </repository>
-        <repository>
-			<id>nuxeo</id>
-			<url>https://maven.nuxeo.org/nexus/content/repositories/public-releases</url>
-		</repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -44,13 +40,7 @@
                         <url>/pluto/pluto.css</url>
                         <url>/pluto/portlet-spec-1.0.css</url>
                         <url>/pluto/portlet-spec-2.0.css</url>
-                        <url>/esup-portlet-intranet-web-springmvc-portlet/css/bootstrap.css</url> 
                     </cssUrls>
-                    <jsUrls>
- 					  <url>/esup-portlet-intranet-web-springmvc-portlet/js/jquery-1.9.1.min.js</url>
-					  <url>/esup-portlet-intranet-web-springmvc-portlet/js/bootstrap.min.js</url> 
-					</jsUrls>
-                    
                     <portletXml>${basedir}/src/main/webapp/WEB-INF/portlet.xml</portletXml>
                     <connectors>
 						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
@@ -148,12 +138,6 @@
         <!-- the other slf4j jars -->
         <!-- using log4j as backend -->
         <!-- Servlet -->
-        <!-- Jackson JSON Mapper -->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.5.3</version>
-        </dependency>
         <dependency>
             <groupId>taglibs</groupId>
             <artifactId>standard</artifactId>
@@ -179,16 +163,6 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-			<groupId>org.nuxeo.ecm.automation</groupId>
-			<artifactId>nuxeo-automation-client</artifactId>
-			<version>5.4.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.nuxeo.ecm.core</groupId>
-			<artifactId>nuxeo-core-schema</artifactId>
-			<version>1.6.2</version>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-io</artifactId>

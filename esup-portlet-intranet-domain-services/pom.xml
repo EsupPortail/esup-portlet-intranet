@@ -12,7 +12,7 @@
     <dependencies>
         <dependency>
             <groupId>org.esupportail</groupId>
-            <artifactId>esup-portlet-intranet-domain-beans</artifactId>
+            <artifactId>esup-portlet-intranet-dao</artifactId>
             <version>1.0.3-SNAPSHOT</version>
             <type>jar</type>
         </dependency>

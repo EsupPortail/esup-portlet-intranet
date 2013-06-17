@@ -7,8 +7,8 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.esup.portlet.intranet.NuxeoResource;
 import org.esup.portlet.intranet.services.auth.Authenticator;
-import org.esup.portlet.intranet.web.NuxeoResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -21,10 +21,8 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Scope("session")
 @Controller
 @RequestMapping(value = "EDIT")
-public class EditWebController extends AbastractExceptionController{
+public class EditWebController extends AbastractBaseController{
 	
-	@Autowired
-	private NuxeoResource userSession;
 	@Autowired
 	private Authenticator authenticator;
     @Autowired
@@ -34,26 +32,44 @@ public class EditWebController extends AbastractExceptionController{
     public ModelAndView editPreferences(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
     	PortletPreferences prefs = request.getPreferences();
-    	if(!prefs.isReadOnly("nuxeoHost")){
-    		model.put("nuxeoHost",prefs.getValue("nuxeoHost", null));
-    	}
-    	if(!prefs.isReadOnly("intranetPath")){
-    		model.put("intranetPath",prefs.getValue("intranetPath", null));
-    	}
+    	
+    	model.put(NUXEO_HOST + "_readOnly", isDisabledFiled(prefs.isReadOnly(NUXEO_HOST)));
+		model.put(NUXEO_HOST,prefs.getValue(NUXEO_HOST, null));
+		
+		model.put(INTRANET_PATH + "_readOnly", isDisabledFiled(prefs.isReadOnly(INTRANET_PATH)));
+		model.put(INTRANET_PATH,prefs.getValue(INTRANET_PATH, null));
+		
     	return new ModelAndView(viewSelector.getViewName(request, "edit"), model);
     }
 	
+	private String isDisabledFiled(boolean flag){
+		return (flag) ? "disabled" : "";
+    }
+	
+	/**
+	 * Store preferences values.
+     * If 'nuxeoHost' in the preferences is not readOnly then recreate the nuxeo session with the 'nuxeoHost' passed.
+     * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@ActionMapping(params="action=edit")
 	public void editPreferences(ActionRequest request, ActionResponse response) throws Exception {
 		PortletPreferences prefs = request.getPreferences();
+		
+		NuxeoResource nuxeoResource = getNuxeoResourceFromPortletSession(request);
+		
 		if(!prefs.isReadOnly("nuxeoHost")){
 			prefs.setValue("nuxeoHost", request.getParameter("nuxeoHost"));
+			prefs.store();
+			makeNuxeoSession(request, nuxeoResource);
     	}
     	if(!prefs.isReadOnly("intranetPath")){
     		prefs.setValue("intranetPath", request.getParameter("intranetPath"));
     	}
 		prefs.store();
-		userSession.expireSession();
+		
 		response.setPortletMode(PortletMode.VIEW);
 	}
 }

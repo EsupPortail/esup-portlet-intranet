@@ -42,7 +42,10 @@
 
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
+    
     <import resource="classpath*:META-INF/esup-portlet-intranet-domain-services-auth.xml" />
+    <import resource="classpath*:META-INF/esup-portlet-intranet-domain-services-nuxeo.xml" />
+    
     <bean id="app_context" class="org.esupportail.commons.context.ApplicationContextHolder" />
 	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
 	
