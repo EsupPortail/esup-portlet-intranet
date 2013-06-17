@@ -3,7 +3,7 @@ package org.esup.portlet.intranet.web.taglib;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap;
+import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.nuxeo.ecm.core.schema.utils.DateParser;
 
 public class IntranetTagLib {

@@ -14,7 +14,7 @@
         <description> Get the value of PropertyMap using key </description>
         <name>getValue</name>
         <function-class>org.esup.portlet.intranet.web.taglib.IntranetTagLib</function-class>
-        <function-signature>String getValue(org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap, java.lang.String)</function-signature>
+        <function-signature>String getValue(org.nuxeo.ecm.automation.client.model.PropertyMap, java.lang.String)</function-signature>
         <example>
             ${esup:getValue(obj, 'java.lang.String')}
         </example>
@@ -24,7 +24,7 @@
         <description> Get the last modified date from PropertyMap </description>
         <name>getLastModifiedDate</name>
         <function-class>org.esup.portlet.intranet.web.taglib.IntranetTagLib</function-class>
-        <function-signature>String getLastModifiedDate(org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap)</function-signature>
+        <function-signature>String getLastModifiedDate(org.nuxeo.ecm.automation.client.model.PropertyMap)</function-signature>
         <example>
             ${esup:getLastModifiedDate(obj)}
         </example>
@@ -34,9 +34,9 @@
         <description> Get img file name </description>
         <name>getImgFileName</name>
         <function-class>org.esup.portlet.intranet.web.taglib.IntranetTagLib</function-class>
-        <function-signature>String getImgFileName(org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap)</function-signature>
+        <function-signature>String getImgFileName(org.nuxeo.ecm.automation.client.model.PropertyMap)</function-signature>
         <example>
-            ${getImgFileName('org.nuxeo.ecm.automation.client.jaxrs.model.PropertyMap')}
+            ${getImgFileName('org.nuxeo.ecm.automation.client.model.PropertyMap')}
         </example>
     </function>
 </taglib>
