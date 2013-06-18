@@ -9,8 +9,7 @@
             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <import resource="classpath*:META-INF/esup-portlet-intranet-dao-nuxeo.xml" />
     <context:annotation-config/>
-    <context:component-scan base-package="org.esup.portlet.intranet.services.nuxeo"/>
+    <context:component-scan base-package="org.esup.portlet.intranet.domain.nuxeo"/>
 
 </beans>

@@ -1,4 +1,4 @@
-package org.esup.portlet.intranet;
+package org.esup.portlet.intranet.domain.nuxeo;
 
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;

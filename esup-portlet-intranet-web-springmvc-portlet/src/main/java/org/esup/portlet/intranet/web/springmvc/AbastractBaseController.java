@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
-import org.esup.portlet.intranet.NuxeoResource;
+import org.esup.portlet.intranet.domain.nuxeo.NuxeoResource;
 import org.esup.portlet.intranet.services.auth.Authenticator;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;

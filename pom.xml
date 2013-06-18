@@ -118,9 +118,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<modules>
-		<module>esup-portlet-intranet-batch</module>
-		<module>esup-portlet-intranet-dao</module>
-		<module>esup-portlet-intranet-utils</module>
 		<module>esup-portlet-intranet-domain-beans</module>
 		<module>esup-portlet-intranet-domain-services</module>
 		<module>esup-portlet-intranet-web-springmvc-portlet</module>

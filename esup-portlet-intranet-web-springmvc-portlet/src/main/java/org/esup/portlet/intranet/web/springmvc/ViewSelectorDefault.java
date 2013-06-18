@@ -42,17 +42,10 @@ public class ViewSelectorDefault {
 	}
 
 	public String getViewName(PortletRequest request, String viewName) {
-		String userAgent = request.getProperty("user-agent");
-		
 		// check to see if this is a mobile device
-		if (this.mobileDeviceRegexes != null && userAgent != null) {
-			for (Pattern regex : this.mobileDeviceRegexes) {
-				if (regex.matcher(userAgent).matches()) {
-					return "mobile_" + viewName;
-				}
-			}
+		if (isMobileAgent(request)) {
+			return "mobile_" + viewName;
 		}
-		
 		// otherwise check the portlet window state
 		WindowState state = request.getWindowState();
 		if (WindowState.MAXIMIZED.equals(state)) {
@@ -65,6 +58,18 @@ public class ViewSelectorDefault {
 
 	public String getEventListViewName(PortletRequest request) {
 		return "ajaxEventList";
+	}
+	
+	public boolean isMobileAgent(PortletRequest request){
+		String userAgent = request.getProperty("user-agent");
+		if (this.mobileDeviceRegexes != null && userAgent != null) {
+			for (Pattern regex : this.mobileDeviceRegexes) {
+				if (regex.matcher(userAgent).matches()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

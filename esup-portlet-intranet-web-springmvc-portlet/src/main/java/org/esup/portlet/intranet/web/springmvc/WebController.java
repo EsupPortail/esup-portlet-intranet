@@ -14,15 +14,14 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.esup.portlet.intranet.NuxeoResource;
-import org.esup.portlet.intranet.services.nuxeo.NuxeoService;
+import org.esup.portlet.intranet.domain.nuxeo.NuxeoResource;
+import org.esup.portlet.intranet.domain.nuxeo.NuxeoService;
 import org.esup.portlet.intranet.web.Breadcrumb;
-import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
 import org.nuxeo.ecm.automation.client.model.FileBlob;
+import org.nuxeo.ecm.automation.client.model.PaginableDocuments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -44,8 +43,8 @@ public class WebController extends AbastractBaseController{
 	int rowcount_mobile;
 	
     @Autowired private NuxeoService nuxeoService;
+    private Breadcrumb breadCrumb = new Breadcrumb();
     
-    private Breadcrumb breadCrumb = new Breadcrumb();;
     
     /**
      * First page.
@@ -126,18 +125,17 @@ public class WebController extends AbastractBaseController{
     	model.put("isuPortal", isuPortal(request));
     	NuxeoResource nuxeoResource = getNuxeoSource(request);
     	
-    	String viewName = viewSelector.getViewName(request, "view");
     	Documents docs = nuxeoService.search(nuxeoResource, key);
     	model.put("docs", docs.list());
+    	model.put("mode", "search");
     	
-    	boolean isMobileMode = viewName.startsWith("mobile");
-    	if(isMobileMode){
-    		viewName = viewSelector.getViewName(request, "search");
+    	if(viewSelector.isMobileAgent(request)){
     		model.put("rowCnt", rowcount_mobile);
     		model.put("leftCnt", docs.size()-rowcount_mobile);
+    		return new ModelAndView(viewSelector.getViewName(request, "search"), model);
+    	}else{
+    		return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     	}
-    	model.put("mode", "search");
-        return new ModelAndView(viewName, model);
     }	
     
 	/**
@@ -152,16 +150,11 @@ public class WebController extends AbastractBaseController{
     	ModelMap model = new ModelMap();
     	model.put("isuPortal", isuPortal(request));
     	NuxeoResource nuxeoResource = getNuxeoSource(request);
-    	
-    	Documents docs = nuxeoService.getNews(nuxeoResource);
-    	PagedListHolder<Document> productList = new PagedListHolder<Document>(docs.list());
-    	model.put("docs", productList.getPageList());
+    	int pageSize = viewSelector.isMobileAgent(request) ? rowcount_mobile : rowcount;
+    	PaginableDocuments docs = nuxeoService.news(nuxeoResource, pageSize);
+    	model.put("docs", docs.list());
      	model.put("mode", "new");
-    	
-    	String viewName = viewSelector.getViewName(request, "view");
-    	productList.setPageSize((viewName.startsWith("mobile")) ? rowcount_mobile : rowcount);
-    	
-        return new ModelAndView(viewName, model);
+        return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }
     
     /**
@@ -213,9 +206,8 @@ public class WebController extends AbastractBaseController{
      * @return
      */
     private boolean checkPerferences(PortletPreferences prefs){
-		String nuxeoHost = prefs.getValue("nuxeoHost", "");
-		String intranetPath = prefs.getValue("intranetPath", "");
-		return (nuxeoHost.startsWith("$") || intranetPath.startsWith("$")) ? false : true;
+		return (prefs.getValue("nuxeoHost", "").startsWith("$") 
+				|| prefs.getValue("intranetPath", "").startsWith("$")) ? false : true;
 	}
     
     /**
@@ -244,7 +236,8 @@ public class WebController extends AbastractBaseController{
     	PortletPreferences prefs = request.getPreferences();
 		nuxeoResource.setRootPath(prefs.getValue(INTRANET_PATH, ""));
 		
-		String intranetPath = (request.getParameter("intranetPath") == null) ? prefs.getValue(INTRANET_PATH, "") : request.getParameter("intranetPath");
+		String intranetPath = (request.getParameter("intranetPath") == null) ? prefs.getValue(INTRANET_PATH, "") 
+				: request.getParameter("intranetPath");
     	nuxeoResource.setIntranetPath(intranetPath);
     	return nuxeoResource;
 	}

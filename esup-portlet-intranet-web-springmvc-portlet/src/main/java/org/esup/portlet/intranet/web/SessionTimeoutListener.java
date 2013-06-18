@@ -2,7 +2,7 @@ package org.esup.portlet.intranet.web;
 
 import javax.servlet.http.HttpSessionEvent;
 
-import org.esup.portlet.intranet.NuxeoResource;
+import org.esup.portlet.intranet.domain.nuxeo.NuxeoResource;
 import org.esupportail.commons.context.ApplicationContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;

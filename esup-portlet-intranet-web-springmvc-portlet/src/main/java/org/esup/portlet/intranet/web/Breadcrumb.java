@@ -3,7 +3,7 @@ package org.esup.portlet.intranet.web;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esup.portlet.intranet.NuxeoResource;
+import org.esup.portlet.intranet.domain.nuxeo.NuxeoResource;
 
 public class Breadcrumb {
 	private List<HtmlCode> pathList = new ArrayList<HtmlCode>();

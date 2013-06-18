@@ -7,7 +7,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.esup.portlet.intranet.NuxeoResource;
+import org.esup.portlet.intranet.domain.nuxeo.NuxeoResource;
 import org.esup.portlet.intranet.services.auth.Authenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -33,17 +33,13 @@ public class EditWebController extends AbastractBaseController{
     	ModelMap model = new ModelMap();
     	PortletPreferences prefs = request.getPreferences();
     	
-    	model.put(NUXEO_HOST + "_readOnly", isDisabledFiled(prefs.isReadOnly(NUXEO_HOST)));
+    	model.put(NUXEO_HOST + "_readOnly", prefs.isReadOnly(NUXEO_HOST));
 		model.put(NUXEO_HOST,prefs.getValue(NUXEO_HOST, null));
 		
-		model.put(INTRANET_PATH + "_readOnly", isDisabledFiled(prefs.isReadOnly(INTRANET_PATH)));
+		model.put(INTRANET_PATH + "_readOnly", prefs.isReadOnly(INTRANET_PATH));
 		model.put(INTRANET_PATH,prefs.getValue(INTRANET_PATH, null));
 		
     	return new ModelAndView(viewSelector.getViewName(request, "edit"), model);
-    }
-	
-	private String isDisabledFiled(boolean flag){
-		return (flag) ? "disabled" : "";
     }
 	
 	/**
