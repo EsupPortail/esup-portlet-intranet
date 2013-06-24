@@ -21,12 +21,11 @@ public class NuxeoServiceImpl implements NuxeoService{
 							.newRequest(DocumentService.FetchDocument)
 							.set("value", nuxeoResource.getIntranetPath())
 							.execute();
-		Documents docs = (Documents) session
-							.newRequest("Document.GetChildren")
-							.setHeader(Constants.HEADER_NX_SCHEMAS, "*")
-							.setInput(root)
-							.execute();
-		return docs;
+		if(root != null){
+			String query = "SELECT * FROM Document WHERE ecm:parentId = '"+root.getId()+"'" + defaultCondition + " ORDER BY dc:title";
+			return queryList(nuxeoResource, query);
+		}
+		return null;
 	}
 	
 	@Override
