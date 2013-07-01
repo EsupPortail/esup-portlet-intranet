@@ -13,7 +13,7 @@
     <tr>
         <td>
             <form:form name="searchForm" method="post" action="${searchUrl}" class="form-inline">
-                <input type="text" name="key" class="input" />
+                <input type="text" name="key" class="input" value="${key}"/>
                 <button type="submit" class="btn btn-small"><spring:message code="button.search" /></button>
             </form:form>
         </td>

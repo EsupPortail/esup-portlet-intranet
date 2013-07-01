@@ -16,7 +16,7 @@
 				<td>
 					<img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" >
 					<c:choose>
-						<c:when test="${doc.type == 'File' || doc.type == 'Picture'}">
+						<c:when test="${doc.type == 'File' || doc.type == 'Picture' || doc.type == 'Note'}">
 							<a href="
 								<portlet:resourceURL >
 									<portlet:param name="action" value="file" />
@@ -36,6 +36,11 @@
 				<td>${esup:getValue(doc.properties, 'dc:creator')}</td>
 			</tr>
 		</c:forEach>
+		</c:if>
+		<c:if test="${not empty noResultMsg}">
+			<tr>
+				<td colspan="2">${noResultMsg}</td>
+			</tr>
 		</c:if>
 	</tbody>
 </table>

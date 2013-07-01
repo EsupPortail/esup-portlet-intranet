@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/mobile_menu.jsp"%>    
 
     <form name="searchForm" method="post" action="${searchUrl}" >
-		<input type="text" name="key"  />
+		<input type="text" name="key" value="${key}"  />
 		<button type="submit"><spring:message code="button.search" /></button>
 	</form>
     

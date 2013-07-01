@@ -41,6 +41,11 @@
 			</tr>
 		</c:forEach>
 		</c:if>
+		<c:if test="${not empty noResultMsg}">
+			<tr>
+				<td colspan="4">${noResultMsg}</td>
+			</tr>
+		</c:if>
 	</tbody>
 </table>
 <!-- List view end -->						

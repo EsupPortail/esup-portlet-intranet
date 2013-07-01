@@ -5,9 +5,7 @@ import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
-import org.nuxeo.ecm.automation.client.model.FileBlob;
 import org.nuxeo.ecm.automation.client.model.PaginableDocuments;
-import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.springframework.stereotype.Service;
 @Service
 public class NuxeoServiceImpl implements NuxeoService{
@@ -62,7 +60,8 @@ public class NuxeoServiceImpl implements NuxeoService{
 	}
 	
 	@Override
-	public FileBlob getFile(NuxeoResource nuxeoResource, String uid) throws Exception{
+	public Document getFileDocument(NuxeoResource nuxeoResource, String uid)
+			throws Exception {
 		Session session = nuxeoResource.getSession();
 		// Get the file document where blob was attached
 		Document doc = (Document) session
@@ -70,17 +69,6 @@ public class NuxeoServiceImpl implements NuxeoService{
 							.setHeader(Constants.HEADER_NX_SCHEMAS, "*")
 							.set("value", uid)
 							.execute();
-		
-		// get the file content property
-		PropertyMap map = doc.getProperties().getMap("file:content");
-		// get the data URL
-		String path = map.getString("data");
-		 
-		// download the file from its remote location
-		FileBlob blob = (FileBlob) session.getFile(path);
-		return blob;
+		return doc;
 	}
-
-
-
 }
