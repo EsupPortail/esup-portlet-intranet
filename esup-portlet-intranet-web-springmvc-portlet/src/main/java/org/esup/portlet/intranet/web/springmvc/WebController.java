@@ -259,6 +259,11 @@ public class WebController extends AbastractBaseController{
      * @param nuxeoResource
      */
     private void setBreadcrumb(ModelMap model, NuxeoResource nuxeoResource){
+    	
+    	
+    	
+    	
+    	
 		breadCrumb.setBreadcrumb(nuxeoResource);
 		model.put("breadcrumb", breadCrumb.getPathList());
     }
@@ -302,6 +307,7 @@ public class WebController extends AbastractBaseController{
 		
 		String intranetPath = (request.getParameter("intranetPath") == null) ? prefs.getValue(INTRANET_PATH, "") 
 				: request.getParameter("intranetPath");
+		
     	nuxeoResource.setIntranetPath(intranetPath);
     	return nuxeoResource;
 	}

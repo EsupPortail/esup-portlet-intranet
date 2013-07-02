@@ -6,6 +6,7 @@ import org.nuxeo.ecm.automation.client.jaxrs.spi.auth.PortalSSOAuthInterceptor;
 
 public class NuxeoResource {
 	private String intranetPath;
+	private String docTitle;
 	private String rootPath;
 	private Session session;
 
@@ -51,4 +52,18 @@ public class NuxeoResource {
 	public void setRootPath(String rootPath) {
 		this.rootPath = rootPath;
 	}
+
+	public String getDocTitle() {
+		return docTitle;
+	}
+
+	public void setDocTitle(String docTitle) {
+		this.docTitle = docTitle;
+	}
+	
+	public void setPath(String intranetPath, String docTitle){
+		this.intranetPath = intranetPath;
+	}
+	
+	
 }

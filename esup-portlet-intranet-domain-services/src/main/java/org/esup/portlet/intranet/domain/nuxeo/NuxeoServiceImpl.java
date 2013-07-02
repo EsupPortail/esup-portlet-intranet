@@ -20,6 +20,7 @@ public class NuxeoServiceImpl implements NuxeoService{
 							.set("value", nuxeoResource.getIntranetPath())
 							.execute();
 		if(root != null){
+			nuxeoResource.setDocTitle(root.getTitle());
 			String query = "SELECT * FROM Document WHERE ecm:parentId = '"+root.getId()+"'" + defaultCondition + " ORDER BY dc:title";
 			return queryList(nuxeoResource, query);
 		}
