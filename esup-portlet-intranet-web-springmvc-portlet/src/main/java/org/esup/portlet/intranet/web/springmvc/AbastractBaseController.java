@@ -104,18 +104,16 @@ public abstract class AbastractBaseController implements MessageSourceAware{
 	
 	protected void makeNuxeoSession(PortletRequest request,NuxeoResource nuxeoResource) throws Exception{
 		PortletPreferences prefs = request.getPreferences();
-		if(prefs.getValue(NUXEO_HOST, "").contains("http://")){
-			String nuxeoHost = prefs.getValue(NUXEO_HOST, "");
-			String nuxeoSecret = prefs.getValue(NUXEO_SECRET, "");
-			String uid;
-			try {
-				uid = authenticator.getUser().getLogin();
-			} catch (Exception e) {
-				// local test mode with pluto plugin.
-				uid = "Administrator";
-			}
-			nuxeoResource.makeSession(nuxeoHost, uid, nuxeoSecret);
+		String nuxeoHost = prefs.getValue(NUXEO_HOST, "");
+		String nuxeoSecret = prefs.getValue(NUXEO_SECRET, "");
+		String uid;
+		try {
+			uid = authenticator.getUser().getLogin();
+		} catch (Exception e) {
+			// local test mode with pluto plugin.
+			uid = "Administrator";
 		}
+		nuxeoResource.makeSession(nuxeoHost, uid, nuxeoSecret);
 	}
 	
 }
