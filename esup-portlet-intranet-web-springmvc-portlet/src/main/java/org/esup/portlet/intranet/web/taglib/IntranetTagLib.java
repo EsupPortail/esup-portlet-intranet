@@ -18,4 +18,10 @@ public class IntranetTagLib {
 	public static String getImgFileName(PropertyMap map){
 		return map.getString("common:icon");
 	}
+	public static boolean hasFicher(PropertyMap map){
+		if(map.get("file:content").equals("null")){
+			return false;
+		}
+		return true;
+	}
 }

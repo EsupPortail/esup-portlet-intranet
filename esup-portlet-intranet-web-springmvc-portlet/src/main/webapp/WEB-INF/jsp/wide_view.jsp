@@ -18,7 +18,22 @@
 				<td>
 					<img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" >
 					<c:choose>
-						<c:when test="${doc.type == 'File' || doc.type == 'Picture' }">
+						<c:when test="${doc.type == 'File' || doc.type == 'Picture'}">
+							<c:choose>
+								<c:when test="${esup:hasFicher(doc.properties)}">
+									<a href="
+										<portlet:resourceURL >
+											<portlet:param name="action" value="file" />
+											<portlet:param name="uid" value="${doc.id}" />
+										</portlet:resourceURL>
+									">${doc.title}</a>
+								</c:when>
+								<c:otherwise>
+									${doc.title} <small>(<spring:message code="file.no.attachment" />)</small>
+								</c:otherwise>
+							</c:choose>
+						</c:when>
+						<c:when test="${doc.type == 'Note'}">
 							<a href="
 								<portlet:resourceURL >
 									<portlet:param name="action" value="file" />

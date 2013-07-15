@@ -39,4 +39,14 @@
             ${getImgFileName('org.nuxeo.ecm.automation.client.model.PropertyMap')}
         </example>
     </function>
+    
+    <function>
+        <description> check existance of the file </description>
+        <name>hasFicher</name>
+        <function-class>org.esup.portlet.intranet.web.taglib.IntranetTagLib</function-class>
+        <function-signature>boolean hasFicher(org.nuxeo.ecm.automation.client.model.PropertyMap)</function-signature>
+        <example>
+            ${hasFicher('org.nuxeo.ecm.automation.client.model.PropertyMap')}
+        </example>
+    </function>
 </taglib>
