@@ -57,12 +57,12 @@ public class EditWebController extends AbastractBaseController{
 		NuxeoResource nuxeoResource = getNuxeoResourceFromPortletSession(request);
 		
 		if(!prefs.isReadOnly("nuxeoHost")){
-			prefs.setValue("nuxeoHost", request.getParameter("nuxeoHost"));
+			prefs.setValue("nuxeoHost", request.getParameter("nuxeoHost").trim());
 			prefs.store();
 			makeNuxeoSession(request, nuxeoResource);
     	}
     	if(!prefs.isReadOnly("intranetPath")){
-    		prefs.setValue("intranetPath", request.getParameter("intranetPath"));
+    		prefs.setValue("intranetPath", request.getParameter("intranetPath").trim());
     	}
 		prefs.store();
 		
