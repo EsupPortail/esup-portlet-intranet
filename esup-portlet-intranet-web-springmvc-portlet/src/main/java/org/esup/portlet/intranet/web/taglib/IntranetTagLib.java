@@ -9,7 +9,8 @@ import org.nuxeo.ecm.core.schema.utils.DateParser;
 public class IntranetTagLib {
 	private static SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
 	public static String getValue(PropertyMap map, String key){
-		return map.getString(key);
+		String value = map.getString(key);
+		return (value == null || value.equals("null")) ? "" : value;
 	}
 	public static String getLastModifiedDate(PropertyMap map){
 		Date d = DateParser.parseDate(map.getString("dc:modified"));
