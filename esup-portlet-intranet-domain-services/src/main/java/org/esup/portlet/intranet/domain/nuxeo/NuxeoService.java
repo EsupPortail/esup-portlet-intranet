@@ -14,4 +14,5 @@ public interface NuxeoService {
 	public Documents search(NuxeoResource nuxeoResource, String key) throws Exception;
 	public PaginableDocuments news(NuxeoResource nuxeoResource, int pageSize) throws Exception;
 	public Document getFileDocument(NuxeoResource nuxeoResource, String uid)throws Exception;
+	public FileDownloadAttr fileDownload(NuxeoResource nuxeoResource, String uid) throws Exception;
 }

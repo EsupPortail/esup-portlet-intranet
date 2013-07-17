@@ -1,10 +1,5 @@
 package org.esup.portlet.intranet.web.springmvc;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.portlet.ActionRequest;
@@ -17,14 +12,12 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.esup.portlet.intranet.domain.nuxeo.FileDownloadAttr;
 import org.esup.portlet.intranet.domain.nuxeo.NuxeoResource;
 import org.esup.portlet.intranet.domain.nuxeo.NuxeoService;
 import org.esup.portlet.intranet.web.Breadcrumb;
-import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
-import org.nuxeo.ecm.automation.client.model.FileBlob;
 import org.nuxeo.ecm.automation.client.model.PaginableDocuments;
-import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -180,78 +173,19 @@ public class WebController extends AbastractBaseController{
     public void fileDown(ResourceRequest request, ResourceResponse response) throws Exception {
     	NuxeoResource nuxeoResource = getNuxeoSource(request);
     	String uid = request.getParameter("uid");
-    	Document doc = nuxeoService.getFileDocument(nuxeoResource, uid);
-    	if(doc.getType().equals("Note")){
-			noteDown(doc, response);
-		}else{
-			fileDown(doc,nuxeoResource,request,response);
-		}
-    }
-    
-    private void fileDown(Document doc, NuxeoResource nuxeoResource, ResourceRequest request, ResourceResponse response) throws Exception{
-    	OutputStream outStream = response.getPortletOutputStream();
-    	// get the file content property
-		PropertyMap map = doc.getProperties().getMap("file:content");
-		// get the data URL
-		String path = map.getString("data");		
-		 
-		// download the file from its remote location
-		FileBlob blob = (FileBlob) nuxeoResource.getSession().getFile(path);
-    	File file = blob.getFile();
-    	String fileName = blob.getFileName();
+    	FileDownloadAttr fileAttr = nuxeoService.fileDownload(nuxeoResource, uid);
     	
-		if (!file.exists() || !file.canRead()) {
-			String message = "<i>"+messageSource.getMessage("exception.file.notfound", null, "", request.getLocale())+"</i>";
-			outStream.write(message.getBytes());
-		} else {
-			FileInputStream inStream = new FileInputStream(file);
-			String mimetype = blob.getMimeType();
-			response.setContentType(mimetype);
-			response.setProperty("Content-disposition", "attachment; filename=\"" + fileName + "\"");
-			response.setContentLength((int) file.length());
-			
-			IOUtils.copy(inStream, outStream);
-		    response.flushBuffer();		
-		}
-		outStream.flush();
-		outStream.close();
-    }
-    
-    private void noteDown(Document doc,  ResourceResponse response) throws IOException{
-    	OutputStream outStream = response.getPortletOutputStream();
-    	
-    	String content = (String)doc.getProperties().get("note:note");
-		String fileName = (String)doc.getProperties().get("dc:title");
-		String mime_type = (String)doc.getProperties().get("note:mime_type");
+		response.setContentType(fileAttr.getMimeType());
+		response.setProperty("Content-disposition", "attachment; filename=\"" + fileAttr.getFileName() + "\"");
+		response.setContentLength((int) fileAttr.getFileLenth());
 		
-		if(!fileName.contains(".")){
-			fileName += "." + getNoteFileType(mime_type);
-		}
-    	
-    	// convert String into InputStream
-    	InputStream inStream = new ByteArrayInputStream(content.getBytes());
-		response.setContentType(mime_type);
-		response.setProperty("Content-disposition", "attachment; filename=\"" + fileName + "\"");
-		response.setContentLength((int) content.length());
-		IOUtils.copy(inStream, outStream);
-	    response.flushBuffer();	
-		outStream.flush();
+		OutputStream outStream = response.getPortletOutputStream();
+		IOUtils.copy(fileAttr.getInStream(), outStream);
+	    response.flushBuffer();
+	    
+	    outStream.flush();
 		outStream.close();
     }
-    
-    private String getNoteFileType(String mime_type){
-		String filetype = "txt";
-		if(mime_type.equals("text/xml")){
-			filetype = "xml";
-		}else if(mime_type.equals("text/x-web-markdown")){
-			filetype = "md";
-		}else if(mime_type.equals("text/plain")){
-			filetype = "txt";
-		}else if(mime_type.equals("text/html")){
-			filetype = "html";
-		}
-		return filetype;
-	}
     
     /**
      * Make Breadcrumb string and save it on the model obj.
@@ -259,11 +193,6 @@ public class WebController extends AbastractBaseController{
      * @param nuxeoResource
      */
     private void setBreadcrumb(ModelMap model, NuxeoResource nuxeoResource){
-    	
-    	
-    	
-    	
-    	
 		breadCrumb.setBreadcrumb(nuxeoResource);
 		model.put("breadcrumb", breadCrumb.getPathList());
     }
