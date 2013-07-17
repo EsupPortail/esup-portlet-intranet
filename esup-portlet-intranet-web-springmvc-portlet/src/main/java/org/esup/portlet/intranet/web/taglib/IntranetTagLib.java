@@ -3,6 +3,8 @@ package org.esup.portlet.intranet.web.taglib;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.nuxeo.ecm.automation.client.model.Document;
+import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.nuxeo.ecm.core.schema.utils.DateParser;
 
@@ -20,9 +22,25 @@ public class IntranetTagLib {
 		return map.getString("common:icon");
 	}
 	public static boolean hasFicher(PropertyMap map){
-		if(map.get("file:content").equals("null")){
-			return false;
+		Object fileContent = map.get("file:content");
+		if(fileContent != null && fileContent.equals("null")){
+			if(map.get("file:content").equals("null")){
+				return false;
+			}
 		}
 		return true;
+	}
+	public static boolean isFolder(Document doc){
+		boolean flag = false;
+		PropertyList pl = doc.getFacets();
+		int cnt = pl.size();
+		for(int i = 0 ; i < cnt ; i++){
+			String type = pl.getString(i);
+			if(type.equals("Folderish")){
+				flag = true;
+				break;
+			}
+		}
+		return flag;
 	}
 }
