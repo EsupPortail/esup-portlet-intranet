@@ -174,15 +174,19 @@ public class WebController extends AbastractBaseController{
     	NuxeoResource nuxeoResource = getNuxeoSource(request);
     	String uid = request.getParameter("uid");
     	FileDownloadAttr fileAttr = nuxeoService.fileDownload(nuxeoResource, uid);
+    	OutputStream outStream = response.getPortletOutputStream();
     	
-		response.setContentType(fileAttr.getMimeType());
-		response.setProperty("Content-disposition", "attachment; filename=\"" + fileAttr.getFileName() + "\"");
-		response.setContentLength((int) fileAttr.getFileLenth());
-		
-		OutputStream outStream = response.getPortletOutputStream();
-		IOUtils.copy(fileAttr.getInStream(), outStream);
-	    response.flushBuffer();
-	    
+    	if (!fileAttr.hasContent()) {
+			String message = "<i>"+messageSource.getMessage("exception.file.notfound", null, "", request.getLocale())+"</i>";
+			outStream.write(message.getBytes());
+		}else{
+			response.setContentType(fileAttr.getMimeType());
+			response.setProperty("Content-disposition", "attachment; filename=\"" + fileAttr.getFileName() + "\"");
+			response.setContentLength((int) fileAttr.getFileLenth());
+			
+			IOUtils.copy(fileAttr.getInStream(), outStream);
+		    response.flushBuffer();
+		}
 	    outStream.flush();
 		outStream.close();
     }

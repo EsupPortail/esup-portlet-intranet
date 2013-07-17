@@ -7,6 +7,7 @@ public class FileDownloadAttr {
 	private int fileLenth;
 	private String mimeType;
 	private String fileName;
+	private boolean hasContent = true;
 	public InputStream getInStream() {
 		return inStream;
 	}
@@ -31,4 +32,11 @@ public class FileDownloadAttr {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+	public boolean hasContent() {
+		return hasContent;
+	}
+	public void setHasContent(boolean hasContent) {
+		this.hasContent = hasContent;
+	}
+	
 }
