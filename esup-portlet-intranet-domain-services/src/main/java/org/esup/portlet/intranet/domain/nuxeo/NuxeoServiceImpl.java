@@ -18,7 +18,6 @@ import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
 import org.nuxeo.ecm.automation.client.model.FileBlob;
 import org.nuxeo.ecm.automation.client.model.PaginableDocuments;
-import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.springframework.stereotype.Service;
 @Service
@@ -75,19 +74,6 @@ public class NuxeoServiceImpl implements NuxeoService{
 	}
 	
 	@Override
-	public Document getFileDocument(NuxeoResource nuxeoResource, String uid)
-			throws Exception {
-		Session session = nuxeoResource.getSession();
-		// Get the file document where blob was attached
-		Document doc = (Document) session
-							.newRequest(DocumentService.FetchDocument)
-							.setHeader(Constants.HEADER_NX_SCHEMAS, "*")
-							.set("value", uid)
-							.execute();
-		return doc;
-	}
-	
-	@Override
 	public FileDownloadAttr fileDownload(NuxeoResource nuxeoResource, String uid) throws Exception {
 		Session session = nuxeoResource.getSession();
 		// Get the file document where blob was attached
@@ -111,11 +97,15 @@ public class NuxeoServiceImpl implements NuxeoService{
 		FileBlob blob = (FileBlob) nuxeoResource.getSession().getFile(path);
     	
 		FileDownloadAttr fileAttr = new FileDownloadAttr();
-		fileAttr.setMimeType(blob.getMimeType());
-		fileAttr.setFileName(blob.getFileName());
-		fileAttr.setInStream(new FileInputStream(blob.getFile()));
-		fileAttr.setFileLenth(blob.getLength());
 		
+		if (!blob.getFile().exists() || !blob.getFile().canRead()) {
+			fileAttr.setHasContent(false);
+		}else {
+			fileAttr.setMimeType(blob.getMimeType());
+			fileAttr.setFileName(blob.getFileName());
+			fileAttr.setInStream(new FileInputStream(blob.getFile()));
+			fileAttr.setFileLenth(blob.getLength());
+		}
 		return fileAttr;
     }
     
@@ -123,16 +113,26 @@ public class NuxeoServiceImpl implements NuxeoService{
     	FileDownloadAttr fileAttr = new FileDownloadAttr();
     	
     	String content = (String)doc.getProperties().get("note:note");
-		String fileName = (String)doc.getProperties().get("dc:title");
 		String mime_type = (String)doc.getProperties().get("note:mime_type");
-    	
-    	if(doc.getProperties().getList("files:files").size() > 0){
+		String fileName = getNoteFileName((String)doc.getProperties().get("dc:title"), mime_type);
+				
+		if(doc.getProperties().getList("files:files").size() == 0){
+			// no attached files found.
+    		// use string content 
+        	fileAttr.setMimeType(mime_type);
+    		fileAttr.setFileName(fileName);
+    		fileAttr.setInStream(new ByteArrayInputStream(content.getBytes()));
+    		fileAttr.setFileLenth(content.length());
     		
-    		Blobs blobs = (Blobs)nuxeoResource.getSession().newRequest("Blob.GetList").setInput(doc).execute();
+		}else{
+			// zip compress
+			Blobs blobs = (Blobs)nuxeoResource.getSession().newRequest("Blob.GetList").setInput(doc).execute();
     		File file = File.createTempFile("nxops-createzip-", ".tmp");
     		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file));
 			try {
 				   HashSet<String> names = new HashSet<String>(); // use a set to avoid zipping entries with same names
+				   
+				   // add attached files
 				   int cnt = 1;
 				   for (Blob blob : blobs) {
 				       String entry = blob.getFileName();
@@ -146,39 +146,34 @@ public class NuxeoServiceImpl implements NuxeoService{
 				           in.close();
 				       }
 				   }
-				   
-		    		if(!fileName.contains(".")){
-		    			fileName += "." + getNoteFileType(mime_type);
-		    		}
 		        	
-		        	// convert String into InputStream
-		        	InputStream in = new ByteArrayInputStream(content.getBytes());
-		        	try {
+				   // add note content
+				   InputStream in = new ByteArrayInputStream(content.getBytes());
+				   try {
 			    	   ZipUtils._zip(fileName, in, out);
 			       } finally {
 			           in.close();
 			       }
+		        	
 			} finally {
 				out.finish();
 				out.close();
 			}
+			
         	fileAttr.setMimeType("application/zip");
     		fileAttr.setFileName(doc.getTitle() + ".zip");
     		fileAttr.setInStream(new FileInputStream(file));
     		fileAttr.setFileLenth((int)file.length());
-    		
-    	}else{
-    		if(!fileName.contains(".")){
-    			fileName += "." + getNoteFileType(mime_type);
-    		}
-    		
-        	fileAttr.setMimeType(mime_type);
-    		fileAttr.setFileName(fileName);
-    		fileAttr.setInStream(new ByteArrayInputStream(content.getBytes()));
-    		fileAttr.setFileLenth(content.length());
-    	}
-    	
+		}
     	return fileAttr;
+    }
+    
+    private String getNoteFileName(String dcTitle, String mime_type){
+    	String fileName = dcTitle;
+    	if(!dcTitle.contains(".")){
+    		fileName += "." + getNoteFileType(mime_type);
+		}
+    	return fileName;
     }
     
     private String getNoteFileType(String mime_type){
