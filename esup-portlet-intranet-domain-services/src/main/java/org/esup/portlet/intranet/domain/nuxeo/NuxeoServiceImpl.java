@@ -162,14 +162,10 @@ public class NuxeoServiceImpl implements NuxeoService{
 				out.finish();
 				out.close();
 			}
-			FileBlob zip = new FileBlob(file);
-			zip.setFileName(doc.getTitle() + ".zip");
-			zip.setMimeType("application/zip");
-			
         	fileAttr.setMimeType("application/zip");
-    		fileAttr.setFileName(zip.getFileName());
-    		fileAttr.setInStream(zip.getStream());
-    		fileAttr.setFileLenth(zip.getLength());
+    		fileAttr.setFileName(doc.getTitle() + ".zip");
+    		fileAttr.setInStream(new FileInputStream(file));
+    		fileAttr.setFileLenth((int)file.length());
     		
     	}else{
     		if(!fileName.contains(".")){
