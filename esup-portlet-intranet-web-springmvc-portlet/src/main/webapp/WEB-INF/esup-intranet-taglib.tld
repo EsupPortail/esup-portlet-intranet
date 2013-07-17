@@ -41,7 +41,7 @@
     </function>
     
     <function>
-        <description> check existance of the file </description>
+        <description> checks existance of the file </description>
         <name>hasFicher</name>
         <function-class>org.esup.portlet.intranet.web.taglib.IntranetTagLib</function-class>
         <function-signature>boolean hasFicher(org.nuxeo.ecm.automation.client.model.PropertyMap)</function-signature>
@@ -49,4 +49,16 @@
             ${hasFicher('org.nuxeo.ecm.automation.client.model.PropertyMap')}
         </example>
     </function>
+    
+     <function>
+        <description> checks whether a file or directory </description>
+        <name>isFolder</name>
+        <function-class>org.esup.portlet.intranet.web.taglib.IntranetTagLib</function-class>
+        <function-signature>boolean isFolder(org.nuxeo.ecm.automation.client.model.Document)</function-signature>
+        <example>
+            ${isFolder('org.nuxeo.ecm.automation.client.model.Document')}
+        </example>
+    </function>   
+    
+    
 </taglib>

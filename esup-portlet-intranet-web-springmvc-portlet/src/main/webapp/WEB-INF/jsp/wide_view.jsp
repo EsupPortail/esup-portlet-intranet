@@ -18,7 +18,15 @@
 				<td>
 					<img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" >
 					<c:choose>
-						<c:when test="${doc.type == 'File' || doc.type == 'Picture'}">
+						<c:when test="${esup:isFolder(doc)}">
+							<a href="
+								<portlet:renderURL>
+									<portlet:param name="action" value="list" />
+									<portlet:param name="intranetPath" value="${doc.path}" />
+								</portlet:renderURL>
+							">${doc.title}</a>
+						</c:when>
+						<c:otherwise>
 							<c:choose>
 								<c:when test="${esup:hasFicher(doc.properties)}">
 									<a href="
@@ -32,25 +40,9 @@
 									${doc.title} <small>(<spring:message code="file.no.attachment" />)</small>
 								</c:otherwise>
 							</c:choose>
-						</c:when>
-						<c:when test="${doc.type == 'Note'}">
-							<a href="
-								<portlet:resourceURL >
-									<portlet:param name="action" value="file" />
-									<portlet:param name="uid" value="${doc.id}" />
-								</portlet:resourceURL>
-							">${doc.title}</a>
-						</c:when>
-						<c:otherwise>
-							<a href="
-								<portlet:renderURL>
-									<portlet:param name="action" value="list" />
-									<portlet:param name="intranetPath" value="${doc.path}" />
-								</portlet:renderURL>
-							">${doc.title}</a>
 						</c:otherwise>
 					</c:choose></td>
-				<td> ${esup:getLastModifiedDate(doc.properties)}</td>
+				<td>${esup:getLastModifiedDate(doc.properties)}</td>
 				<td>${esup:getValue(doc.properties, 'dc:creator')}</td>
 				<td>${esup:getValue(doc.properties, 'dc:description')}</td>
 			</tr>
