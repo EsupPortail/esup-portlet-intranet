@@ -5,16 +5,21 @@
 <%@ include file="/WEB-INF/jsp/breadcrumb.jsp"%>
 
 <table class="table table-hover">
-	<tr>
-		<th><spring:message code="list.title" /></th>
-		<th><spring:message code="list.creator" /></th>
-	</tr>
+    <thead>
+    	<tr>
+    		<th><spring:message code="list.title" /></th>
+    		<th><spring:message code="list.creator" /></th>
+    	</tr>
+    </thead>
 	<tbody>
 		<c:if test="${not empty docs}">
 		<c:forEach var="doc" items="${docs}">
 			<tr>
 				<td>
-					<img src="<%=request.getContextPath()%>/img/${esup:getImgFileName(doc.properties)}" >
+                    <c:set var="iconName" value="${esup:getImgFileName(doc.properties)}" />
+                    <c:if test="${iconName != null && iconName != ''}">
+					   <img src="<%=request.getContextPath()%>/img${iconName}" >
+                    </c:if>
 					<c:choose>
 						<c:when test="${esup:isFolder(doc)}">
 							<a href="

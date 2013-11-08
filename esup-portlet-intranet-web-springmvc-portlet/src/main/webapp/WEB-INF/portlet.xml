@@ -29,11 +29,11 @@
         <portlet-preferences>
             <preference>
                 <name>nuxeoHost</name>
-                <value>${nuxeoHost}</value>
+                <value></value>
             </preference>
             <preference>
                 <name>intranetPath</name>
-                <value>${intranetPath}</value>
+                <value></value>
             </preference>
             <preference>
                 <name>nuxeoPortalAuthSecret</name>

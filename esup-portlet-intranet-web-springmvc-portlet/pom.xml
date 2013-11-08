@@ -60,7 +60,8 @@
 		                    <groupId>org.jasig.resourceserver</groupId>
 		                    <artifactId>resource-server-content</artifactId>
 		                    <includes>
-		                        <include>js/</include>
+                                <include>js/</include>
+                                <include>css/</include>
 		                    </includes>
 		                </overlay>
                 	</overlays>

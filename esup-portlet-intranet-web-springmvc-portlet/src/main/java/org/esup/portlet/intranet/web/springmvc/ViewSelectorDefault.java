@@ -50,9 +50,8 @@ public class ViewSelectorDefault {
 		WindowState state = request.getWindowState();
 		if (WindowState.MAXIMIZED.equals(state)) {
 			return "wide_" + viewName;
-		} else {
-			return "narrow_" + viewName;
 		}
+		return "narrow_" + viewName;
 		
 	}
 

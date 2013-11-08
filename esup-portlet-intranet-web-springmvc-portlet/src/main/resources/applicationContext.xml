@@ -50,11 +50,16 @@
 	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
 	
 	<util:list id="headElements">
-    	<bean class="org.esup.portlet.intranet.web.springmvc.HeadElement"
-    		p:name="link"
-    		p:href="/css/bootstrap.css"
-    		p:rel="stylesheet"
-    		p:type="text/css"/>
+        <bean class="org.esup.portlet.intranet.web.springmvc.HeadElement"
+            p:name="link"
+            p:href="/css/bootstrap.min.css"
+            p:rel="stylesheet"
+            p:type="text/css"/>
+        <bean class="org.esup.portlet.intranet.web.springmvc.HeadElement"
+            p:name="link"
+            p:href="/css/portlet-intranet.css"
+            p:rel="stylesheet"
+            p:type="text/css"/>
     	<bean class="org.esup.portlet.intranet.web.springmvc.HeadElement"
     		p:name="script"
     		p:src="/js/jquery-1.9.1.js"

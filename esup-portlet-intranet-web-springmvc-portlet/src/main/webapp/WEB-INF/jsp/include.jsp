@@ -15,7 +15,7 @@
 <rs:resourceURL var="jqueryJS" value="/js/jquery-1.9.1.min.js"/>
 <rs:resourceURL var="jqueryMobileJS" value="/js/jquery.mobile-1.3.1.min.js"/>
 <rs:resourceURL var="jqueryMobileCSS" value="/css/jquery.mobile-1.3.1.min.css"/>
-<rs:resourceURL var="bootstrapCSS" value="/css/bootstrap.css"/>
+<rs:resourceURL var="bootstrapCSS" value="/css/bootstrap.min.css"/>
 <rs:resourceURL var="esupIntranetCSS" value="/css/esup-intranet.css"/>
 
 <portlet:actionURL var="searchUrl" >
@@ -36,5 +36,6 @@
 	<portlet:param name="action" value="edit" />
 </portlet:actionURL>
 
-<link type="text/css" rel="stylesheet" href="${bootstrapCSS }" />
+<link type="text/css" rel="stylesheet" href="${bootstrapCSS}" />
+<link type="text/css" rel="stylesheet" href="${esupIntranetCSS}" />
 

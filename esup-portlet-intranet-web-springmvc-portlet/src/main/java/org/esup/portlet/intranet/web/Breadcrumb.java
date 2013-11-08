@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.esup.portlet.intranet.domain.nuxeo.NuxeoResource;
+import org.esup.portlet.intranet.domain.nuxeo.NuxeoService;
+import org.nuxeo.ecm.automation.client.model.Document;
 
 public class Breadcrumb {
 	private List<HtmlCode> pathList = new ArrayList<HtmlCode>();
@@ -12,7 +14,7 @@ public class Breadcrumb {
 		return pathList;
 	}
 
-	public void setBreadcrumb(NuxeoResource nuxeoResource) {
+	public void setBreadcrumb(NuxeoResource nuxeoResource, NuxeoService nuxeoService) throws Exception {
 		
 		pathList.clear();
 		
@@ -22,29 +24,37 @@ public class Breadcrumb {
 		int lastSlashIndex = rootPath.lastIndexOf('/');
 		int rootPathLenth = rootPath.length() - 1;
 		
-		if(lastSlashIndex > 0 && lastSlashIndex == rootPathLenth){
+		if(lastSlashIndex > 0 && lastSlashIndex == rootPathLenth) {
 			rootPath = rootPath.substring(0, rootPathLenth);
 			lastSlashIndex = rootPath.lastIndexOf('/');
 		}
 		
-		String firstPath = rootPath.substring(lastSlashIndex + 1);
+		final boolean isRoot = rootPath.equals("/");
+		final String firstPath = isRoot ? 
+				rootPath : rootPath.substring(lastSlashIndex + 1);
 		pathList.add(new HtmlCode(firstPath, null));
 		
-		if(!intranetpath.equals(rootPath)){
+		if(!intranetpath.equals(rootPath)) {
 			
-			String pathForAdd = intranetpath.substring(rootPath.length()+1);
-			String[] tmp = pathForAdd.split("/");
-			if(tmp != null){
-				String basePath = rootPath;
-				for(String lastFolderName : tmp){
+			final String pathForAdd = isRoot ? 
+					intranetpath.substring(1) : intranetpath.substring(rootPath.length() + 1);
+			final String[] tmp = pathForAdd.split("/");
+			if(tmp != null) {
+				String basePath = isRoot ? "" : rootPath;
+				for(String lastFolderName : tmp) {
 					basePath +=  "/" + lastFolderName;
-					pathList.add(new HtmlCode(nuxeoResource.getDocTitle(), basePath));
+					pathList.add(getNxResource(nuxeoService
+							.getDocument(basePath, nuxeoResource.getSession())));
 				}
 			}
 		}
 	}
+		
+	private HtmlCode getNxResource(Document document) {
+		return new HtmlCode(document.getTitle(), document.getPath());
+	}
 	
-	public class HtmlCode{
+	public class HtmlCode {
 		private String title;
 		private String path;
 		

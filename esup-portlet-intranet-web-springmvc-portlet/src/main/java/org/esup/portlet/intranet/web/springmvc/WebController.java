@@ -139,9 +139,8 @@ public class WebController extends AbastractBaseController{
     		model.put("rowCnt", rowcount_mobile);
     		model.put("leftCnt", docs.size()-rowcount_mobile);
     		return new ModelAndView(viewSelector.getViewName(request, "search"), model);
-    	}else{
-    		return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     	}
+    	return new ModelAndView(viewSelector.getViewName(request, "view"), model);
     }	
     
 	/**
@@ -182,7 +181,7 @@ public class WebController extends AbastractBaseController{
 		}else{
 			response.setContentType(fileAttr.getMimeType());
 			response.setProperty("Content-disposition", "attachment; filename=\"" + fileAttr.getFileName() + "\"");
-			response.setContentLength((int) fileAttr.getFileLenth());
+			response.setContentLength(fileAttr.getFileLenth());
 			
 			IOUtils.copy(fileAttr.getInStream(), outStream);
 		    response.flushBuffer();
@@ -195,9 +194,10 @@ public class WebController extends AbastractBaseController{
      * Make Breadcrumb string and save it on the model obj.
      * @param model
      * @param nuxeoResource
+     * @throws Exception 
      */
-    private void setBreadcrumb(ModelMap model, NuxeoResource nuxeoResource){
-		breadCrumb.setBreadcrumb(nuxeoResource);
+    private void setBreadcrumb(ModelMap model, NuxeoResource nuxeoResource) throws Exception {
+		breadCrumb.setBreadcrumb(nuxeoResource, nuxeoService);
 		model.put("breadcrumb", breadCrumb.getPathList());
     }
     

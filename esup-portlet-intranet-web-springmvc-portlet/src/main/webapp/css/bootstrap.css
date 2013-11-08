@@ -1,11 +1,11 @@
 /*!
- * Bootstrap v2.3.1
+ * Bootstrap v2.3.2
  *
- * Copyright 2012 Twitter, Inc
+ * Copyright 2013 Twitter, Inc
  * Licensed under the Apache License v2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ * Designed and built with all the love in the world by @mdo and @fat.
  */
 
 .clearfix {
@@ -1025,7 +1025,7 @@ pre code {
 }
 
 form {
-  margin: 0 0 0;
+  margin: 0 0 20px;
 }
 
 fieldset {
@@ -3009,6 +3009,15 @@ table th[class*="span"],
   display: block;
 }
 
+.dropdown-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 990;
+}
+
 .pull-right > .dropdown-menu {
   right: 0;
   left: auto;
@@ -4938,9 +4947,10 @@ input[type="submit"].btn.btn-mini {
 }
 
 .breadcrumb {
-  padding: 5px 15px;
-  margin: 5 0 0;
+  padding: 8px 15px;
+  margin: 0 0 20px;
   list-style: none;
+  background-color: #f5f5f5;
   -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
           border-radius: 4px;

@@ -24,7 +24,15 @@ import org.springframework.stereotype.Service;
 public class NuxeoServiceImpl implements NuxeoService{
 	
 	private String defaultCondition = "AND (ecm:mixinType != 'HiddenInNavigation') AND (ecm:currentLifeCycleState != 'deleted') ";
-	
+
+	@Override
+	public Document getDocument(final String path, final Session session) throws Exception {
+		return (Document) session
+				.newRequest(DocumentService.FetchDocument)
+				.set("value", path)
+				.execute();
+	}
+
 	@Override
 	public Documents getList(NuxeoResource nuxeoResource) throws Exception{
 		Session session = nuxeoResource.getSession();
